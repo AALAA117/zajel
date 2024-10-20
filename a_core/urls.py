@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("profile/", include("a_users.urls")),
+    path("friends/", include("friends.urls")),
     path("api/", include('a_users.urls', namespace="auth")),
-
-
 ]
