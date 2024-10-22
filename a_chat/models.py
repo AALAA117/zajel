@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class ZajelMessage(models.Model):
-    # TODO: should be named to group_id instad of group_name
+
     group_name = models.ForeignKey('ZajelGroup', on_delete=models.CASCADE, related_name='chat_messages')
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     body = models.TextField()
@@ -28,8 +28,4 @@ class ZajelGroup(models.Model):
     @property
     def name(self):
         return self.__str__()
-
-    # TODO: make a deafult image for the group
-    # @property
-    # def avatar(self):
-    #     return self.image.url if self.image else f'{settings.STATIC_URL}images/avatar.png'
+    
