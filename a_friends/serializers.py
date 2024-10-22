@@ -12,4 +12,4 @@ class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
         fields = '__all__'  # Or specify the fields you want to include in your API.
-        read_only_fields = ['is_active', 'sender']
+        read_only_fields = ['sender']
