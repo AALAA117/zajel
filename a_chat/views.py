@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from .models import ZajelGroup, ZajelMessage
 from .serializers import ZajelGroupSerializer, ZajelMessageSerializer
+from rest_framework import status
+from rest_framework.response import Response
 
 
 class ZajelGroupViewSet(viewsets.ModelViewSet):
@@ -44,3 +46,28 @@ class ZajelMessageViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+
+class ZajelGroupMessagesViewSet(viewsets.ModelViewSet):
+    serializer_class = ZajelMessageSerializer
+
+    def get_queryset(self):
+        group_id = self.kwargs.get("group_id")
+
+        if group_id is not None and ZajelGroup.objects.filter(id=group_id).exists():
+            messages = ZajelMessage.objects.filter(group_name_id=group_id)
+            return messages
+
+        return ZajelMessage.objects.none()
+
+    def list(self, request, *args, **kwargs):
+        group_id = self.kwargs.get("group_id")
+
+        # Check if the group exists
+        if not ZajelGroup.objects.filter(id=group_id).exists():
+            return Response(
+                {"error": "Group not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Call the superclass's list method to return the filtered messages
+        return super().list(request, *args, **kwargs)
