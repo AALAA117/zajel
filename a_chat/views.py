@@ -1,6 +1,7 @@
 from rest_framework import viewsets
-from .models import ZajelGroup , ZajelMessage
-from .serializers import  ZajelGroupSerializer , ZajelMessageSerializer
+from .models import ZajelGroup, ZajelMessage
+from .serializers import ZajelGroupSerializer, ZajelMessageSerializer
+
 
 class ZajelGroupViewSet(viewsets.ModelViewSet):
     queryset = ZajelGroup.objects.filter()
@@ -19,6 +20,7 @@ class ZajelGroupViewSet(viewsets.ModelViewSet):
 
         return super().list(request, *args, **kwargs)
 
+
 class ZajelMessageViewSet(viewsets.ModelViewSet):
     queryset = ZajelMessage.objects.all()
     serializer_class = ZajelMessageSerializer
@@ -29,11 +31,13 @@ class ZajelMessageViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         # Retrieve the message instance
         instance = self.get_object()
-        
+
         # Check if the user is the author of the message
         if instance.author != request.user:
-            return Response({"error": "You do not have permission to edit this message. go awawy"},
-                            status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "You do not have permission to edit this message"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         # Proceed with the update if the user is the author
         serializer = self.get_serializer(instance, data=request.data)
