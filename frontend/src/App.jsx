@@ -1,24 +1,21 @@
-import Header from "./Header.jsx";
-import ContentTable from "./Content.jsx";
-import Chat from "./Chat.jsx";
-import Bob from './assets/bob.jpeg';
+import React from "react";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
+import PrivateRoute from "./utils/PrivateRoute";
+import { AuthProvider } from "./context/AuthContext";
+import Homepage from "./Homepage.jsx";
+import Login from "./Login.jsx";
+import Signup from "./Signup.jsx";
 function App() {
-  const handleLogout = () => {
-    alert("Logging out...");
-  };
-  const newcontact = {
-    name: "Bob",
-    lastMessage: "hi, are you okay",
-    photo: Bob
-  };
   return (
-    <>
-      <Header onlogout={handleLogout} />
-      <div className="app-container">
-        <ContentTable />
-        <Chat contact={newcontact} />
-      </div>
-    </>
+    <Router>
+      <AuthProvider>
+        <Switch>
+          <Route component={Login} path="/login" />
+          <Route component={Signup} path="/signup" exact />
+          <Route component={Homepage} path="/" exact />
+        </Switch>
+      </AuthProvider>
+    </Router>
   );
 }
 
