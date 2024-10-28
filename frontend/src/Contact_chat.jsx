@@ -1,17 +1,15 @@
-import Bob from './assets/bob.jpeg';
-
-function Content_Chat(){
+function Content_Chat({ image, name, lastMessage, onClick }){
     return(
-        <div className="contentchat">
+        <div className="contentchat" onClick={onClick}>
             <img
                 className="contentchat-image"
-                src={Bob}
-                alt="bob"
+                src= {image}
+                alt= {name}
                 width="35" 
                 height="35" 
                 />
-            <h2 className="contentchat-name">Bob</h2>
-            <p className="contentchat-lastmessage">hi, are you okay</p>
+            <h2 className="contentchat-name">{name}</h2>
+            <p className="contentchat-lastmessage">{lastMessage}</p>
         </div>
     )
 }

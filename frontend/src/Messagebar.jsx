@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function Messagebar({ onSendMessage }) {
-    const [newMessage, setNewMessage] = useState('');
+  const [message, setMessage] = useState("");
 
-    const handleSend = () => {
-        if (newMessage.trim()) {
-            onSendMessage(newMessage); // Call the passed function to send the message
-            setNewMessage(''); // Clear the input after sending
-        }
-    };
+  const handleSend = () => {
+    onSendMessage(message); // Call the send function passed from Chat
+    setMessage(""); // Clear the input
+  };
 
-    return (
-        <div className="chat-input">
-            <input
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Type a message..."
-            />
-            <button onClick={handleSend}>Send</button>
-        </div>
-    );
+  return (
+    <div className="chat-input">
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type a message..."
+      />
+      <button onClick={handleSend}>Send</button>
+    </div>
+  );
 }
 
 export default Messagebar;

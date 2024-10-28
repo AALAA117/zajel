@@ -13,8 +13,39 @@
   color:aliceblue;
 }
 
+.upperpart .personal-container {
+  position: relative; /* Position relative for dropdown positioning */
+}
+
+.upperpart .personal{
+  margin-left: 1090%;
+  border-radius: 20%;
+  background-color: aliceblue;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s;
+}
+
+.upperpart .personal:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px;
+  background-color: rgb(233, 243, 255);
+  border: 1px solid #00416a;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 250px;
+  margin-left: 900%;
+  
+}
+
+
 .upperpart .logout{
-  margin-right: 100px;
+  margin-right: 150px;
   border-radius: 20%;
   background-color: aliceblue;
   cursor: pointer;
@@ -38,6 +69,13 @@
   display: flex;
   flex-direction: column;
   
+}
+
+.contenttable .search-bar {
+  width: 99.5%;
+  border: 1px solid hsl(0, 0%, 80%);
+  border-radius: 10px;
+
 }
 
 .contentchat, .publicchat{
@@ -64,6 +102,8 @@
   margin-left: 10px;
   margin-top: 5px;
 }
+
+
 
 .contentchat .contentchat-name, .publicchat .publicchat-name{
   padding-left: 20px;

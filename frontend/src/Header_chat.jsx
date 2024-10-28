@@ -1,10 +1,11 @@
 
 import React from 'react';
 
-function Headerchat({ contact }) {
+function Headerchat({contact}) {
+    if (!contact) return <div className="chat-header">Select a contact to start chatting</div>;
     return (
         <div className="chat-header">
-            <img src={contact.photo} alt={contact.name} className="contact-image" />
+            <img className="contact-image" src={contact.image} alt={contact.name} />
             <h2>{contact.name}</h2>
         </div>
     );
