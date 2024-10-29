@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Public_chat from "./Publicchat";
 import Content_Chat from "./Contact_chat";
 import SearchBar from "./SearchBar";
-import Create_Button from "./Create";
+import CreateGroupButton from "./Create";
 import Footer from "./Footer";
 import axios from "axios";
 import Default from './assets/default.jpeg'
@@ -39,7 +39,7 @@ function ContentTable() {
   return (
     <div className="contenttable">
       <SearchBar selectContact={selectContact} />
-      <Create_Button addNewChat={addNewChat} />
+      <CreateGroupButton addNewChat={addNewChat} />
       {contacts.map((contact) => (
         <Content_Chat
           key={contact.id}

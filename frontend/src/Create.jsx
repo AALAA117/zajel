@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Create_Button() {
+function CreateGroupButton() {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showUserList, setShowUserList] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState([]);
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+  const handleCreateGroupClick = () => {
+    setShowDropdown(true);
   };
 
-  const handleNewChat = () => {
-    setShowDropdown(false);
-    setShowUserList(true); // Show the list of users to select from
+  const toggleFriendSelection = (friendId) => {
+    setSelectedFriends((prevSelected) =>
+      prevSelected.includes(friendId)
+        ? prevSelected.filter((id) => id !== friendId)
+        : [...prevSelected, friendId]
+    );
   };
 
-  const startChatWithUser = async (userId) => {
+  const createGroup = async () => {
     try {
-      // api for all users data
+      // send the create to the back 
       const response = await axios.post(
         "https",
-        { userId },
+        { userIds: selectedFriends },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -29,17 +32,23 @@ function Create_Button() {
       );
 
       if (response.status === 201) {
-        console.log("New chat created successfully");
+        console.log("New group created successfully");
       }
     } catch (err) {
-      console.error("Error creating new chat:", err);
+      console.error("Error creating new group:", err);
     }
-    setShowUserList(false);
+    setShowDropdown(false);
+    setSelectedFriends([]); // Clear selected friends after creating the group
+  };
+
+  const cancelGroupCreation = () => {
+    setShowDropdown(false);
+    setSelectedFriends([]); // Clear selected friends if canceled
   };
 
   useEffect(() => {
-    if (showUserList) {
-      // send the backend the new chat
+    if (showDropdown) {
+      // api to get friend list
       axios
         .get("https", {
           headers: {
@@ -47,53 +56,47 @@ function Create_Button() {
           },
         })
         .then((response) => {
-          setUsers(response.data);
+          setFriends(response.data);
         })
         .catch((err) => {
-          console.error("Error fetching users:", err);
+          console.error("Error fetching friends:", err);
         });
     }
-  }, [showUserList]);
+  }, [showDropdown]);
 
   return (
-    <div className="create-chat-group-button">
-      <button onClick={toggleDropdown} className="button-main">
-        Create
+    <div className="create-group">
+      <button onClick={handleCreateGroupClick} className="button-main">
+        Create Group
       </button>
 
       {showDropdown && (
         <div className="dropdown-menu">
-          <button onClick={handleNewChat} className="dropdown-item">
-            Create New Chat
-          </button>
-        </div>
-      )}
-      {showUserList && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Select a User to Chat With</h2>
-            <ul>
-              {users.length > 0 ? (
-                users.map((user) => (
-                  <li key={user.id}>
-                    <button
-                      className="user-item"
-                      onClick={() => startChatWithUser(user.id)}
-                    >
-                      {user.name}
-                    </button>
-                  </li>
-                ))
-              ) : (
-                <li>Loading users...</li>
-              )}
-            </ul>
-            <button onClick={() => setShowUserList(false)}>Close</button>
-          </div>
+          <h2>Select Friends for Group</h2>
+          <ul>
+            {friends.length > 0 ? (
+              friends.map((friend) => (
+                <li key={friend.id}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selectedFriends.includes(friend.id)}
+                      onChange={() => toggleFriendSelection(friend.id)}
+                    />
+                    {friend.name}
+                  </label>
+                </li>
+              ))
+            ) : (
+              <li>Loading friends...</li>
+            )}
+          </ul>
+          <button onClick={createGroup}>Create Group</button>
+          <button onClick={cancelGroupCreation}>Cancel</button>
         </div>
       )}
     </div>
   );
 }
 
-export default Create_Button;
+export default CreateGroupButton;
