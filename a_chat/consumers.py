@@ -13,7 +13,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         query_string = self.scope["query_string"].decode("utf-8")
         print(f"Query String: {type(query_string)}")  # Debugging line
 
-        self.token = self.scope["query_string"].decode("utf-8").split("token=")[-1]
+        self.token = self.scope["query_string"].decode(
+            "utf-8").split("token=")[-1]
         self.user = await self.get_user_from_token(self.token)
         self.scope["user"] = self.user
 
@@ -34,7 +35,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Leave the room group
         print(
             f"Disconnected from room: {
-              self.room_name} with code {close_code}"
+                self.room_name} with code {close_code}"
         )
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -42,7 +43,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if token:
             try:
                 # decode token
-                payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+                payload = jwt.decode(
+                    token, settings.SECRET_KEY, algorithms=["HS256"])
                 user_id = payload["user_id"]
                 user = await database_sync_to_async(User.objects.get)(id=user_id)
                 return user
@@ -62,7 +64,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        message = text_data_json.get("message")
 
         # Log user authentication status
         print(f"User authenticated: {self.scope['user'].is_authenticated}")

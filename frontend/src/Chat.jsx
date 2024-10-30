@@ -2,14 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import Headerchat from "./Header_chat";
 import Messagebar from "./Messagebar";
 import MessageScreen from "./Message_screen";
-import api from "./core/api";
 import { jwtDecode } from "jwt-decode";
 import { handleSendMessage, handleReceiveMessage } from "./core/messagehandler"; // Import handlers
 import { useWebSocket } from "./core/websocket";
+import useAxios from "./utils/useAxios";
 
 function Chat({ contact }) {
   const [messages, setMessages] = useState([]);
   const sendMessageRef = useRef(null);
+  const api = useAxios();
   const authTokens = localStorage.getItem("authTokens");
   console.log("token", authTokens);
   const UserId = jwtDecode(authTokens).user_id;
@@ -18,10 +19,9 @@ function Chat({ contact }) {
     const fetchMessages = async () => {
       if (contact) {
         try {
-          const response = await api({
-            method: "GET",
-            url: `/api/groupmessages/${contact.id}/`,
-          });
+          const response = await api.get(
+            `/chat/api/groupmessages/${contact.id}/`
+          );
           setMessages(response.data);
           console.log("Group number", contact.id);
           console.log("response", response.data);
@@ -59,6 +59,7 @@ function Chat({ contact }) {
         ws.close();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contact, ws]);
   return (
     <div className="chatbox">
