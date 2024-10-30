@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 
 function Headerchat({contact}) {
@@ -9,6 +10,7 @@ function Headerchat({contact}) {
             <h2>{contact.name}</h2>
         </div>
     );
+
 }
 
 export default Headerchat;

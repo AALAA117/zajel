@@ -1,55 +1,48 @@
+/* eslint-disable react/jsx-pascal-case */
 import React, { useEffect, useState } from "react";
 import Public_chat from "./Publicchat";
-import Content_Chat from "./Contact_chat";
-import SearchBar from "./SearchBar";
-import CreateGroupButton from "./Create";
+import api from "./core/api";
 import Footer from "./Footer";
-import axios from "axios";
-import Default from './assets/default.jpeg'
 
-function ContentTable() {
-  const [contacts, setContacts] = useState([]);
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [allUsers, setAllUsers] = useState([]);
+function ContentTable({ onSelectChat }) {
+  const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    // API to get contacts
-    axios
-      .get('https', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      })
-      .then((response) => {
-        setContacts(response.data);
-      })
-      .catch((err) => {
-        console.error('Error fetching contacts:', err);
-      });
+    const fetchGroups = async () => {
+      try {
+        const response = await api({
+          method: "GET",
+          url: "/api/groups/",
+        });
+        const data = response.data;
+        console.log("fetched groups:", data);
+        setGroups(data);
+      } catch (error) {
+        console.error("Error fetching groups", error);
+      }
+    };
+    fetchGroups();
   }, []);
 
-  const addNewChat = (newChat) => {
-    setContacts((prevContacts) => [...prevContacts, newChat]);
+  const handleChatClick = (group) => {
+    onSelectChat({
+      id: group.id,
+      name: group.group_name,
+      photo: group.group_image,
+    });
   };
-
-  const selectContact = (contact) => {
-    setSelectedContact(contact);
-  };
-
   return (
     <div className="contenttable">
-      <SearchBar selectContact={selectContact} />
-      <CreateGroupButton addNewChat={addNewChat} />
-      {contacts.map((contact) => (
-        <Content_Chat
-          key={contact.id}
-          image={contact.image || Default}
-          name={contact.name}
-          lastMessage={contact.lastMessage}
-          onClick={() => setSelectedContact(contact)}
-        />
+      {groups.map((group) => (
+        <div
+          key={group.id}
+          className="group"
+          onClick={() => handleChatClick(group)}
+        >
+          <Public_chat name={group.group_name} />
+        </div>
       ))}
-
+      {/* <Content_Chat /> */}
       <Footer />
     </div>
   );

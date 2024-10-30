@@ -1,53 +1,82 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Headerchat from "./Header_chat";
 import Messagebar from "./Messagebar";
 import MessageScreen from "./Message_screen";
+import api from "./core/api";
+import { jwtDecode } from "jwt-decode";
+import { handleSendMessage, handleReceiveMessage } from "./core/messagehandler"; // Import handlers
+import { useWebSocket } from "./core/websocket";
 
-function Chat({ selectedContact }) {
+function Chat({ contact }) {
   const [messages, setMessages] = useState([]);
-  const [ws, setWs] = useState(null);
-
+  const sendMessageRef = useRef(null);
+  const authTokens = localStorage.getItem("authTokens");
+  console.log("token", authTokens);
+  const UserId = jwtDecode(authTokens).user_id;
+  const { ws, isWsOpen } = useWebSocket();
   useEffect(() => {
-    // api of web socket
-    const socket = new WebSocket("websocket");
-
-    socket.onopen = () => {
-      console.log("WebSocket connection established");
+    const fetchMessages = async () => {
+      if (contact) {
+        try {
+          const response = await api({
+            method: "GET",
+            url: `/api/groupmessages/${contact.id}/`,
+          });
+          setMessages(response.data);
+          console.log("Group number", contact.id);
+          console.log("response", response.data);
+        } catch (error) {
+          console.error("Error fetching messages", error);
+        }
+      }
     };
+    fetchMessages();
+    // Ensure ws is initialized before setting event handlers
+    if (ws) {
+      ws.onopen = () => {
+        console.log("WebSocket connection established.");
+        ws.send(JSON.stringify({ action: "subscribe", room: contact.name }));
+      };
 
-    socket.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    };
+      ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        console.log("Received message from server:", message);
+        handleReceiveMessage(message, setMessages);
+      };
 
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+      ws.onclose = () => {
+        console.log("WebSocket closed");
+      };
 
-    setWs(socket);
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+    }
 
     return () => {
-      socket.close();
+      if (ws && ws.readyState === 1) {
+        ws.send(JSON.stringify({ action: "unsubscribe", room: contact.name }));
+        ws.close();
+      }
     };
-  }, []);
-
-  const handleSendMessage = (messageText) => {
-    if (!messageText || !selectedContact) return;
-
-    const message = {
-      to: selectedContact.id,
-      text: messageText,
-      senderId: "your-user-id", // Replace with actual user ID
-    };
-
-    ws.send(JSON.stringify(message));
-  };
-
+  }, [contact, ws]);
   return (
     <div className="chatbox">
-      <Headerchat contact={selectedContact} />
-      <MessageScreen messages={messages} />
-      <Messagebar onSendMessage={handleSendMessage} />
+      <Headerchat contact={contact} />
+      <MessageScreen messages={messages} currentUser={UserId} />
+      <Messagebar
+        onSendMessage={(message) => {
+          if (isWsOpen) {
+            message = {
+              body: message,
+              author: UserId,
+            };
+            handleSendMessage(message, sendMessageRef, setMessages, ws);
+          } else {
+            console.error("WebSocket is not open. Cannot send message.");
+          }
+        }}
+      />
     </div>
   );
 }

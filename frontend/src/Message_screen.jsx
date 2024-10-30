@@ -1,22 +1,20 @@
+// MessageScreen.jsx
 import React from "react";
+import "./Message_screen.css";
 
-function MessageScreen({ messages }) {
+function MessageScreen({ messages, currentUser }) {
   return (
     <div className="chat-messages">
-      {messages.length === 0 ? (
-        <p>No messages</p>
-      ) : (
-        messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${
-              message.senderId === "your-user-id" ? "sent" : "received"
-            }`}
-          >
-            <p>{message.text}</p>
-          </div>
-        ))
-      )}
+      {messages.map((msg, index) => (
+        <div
+          key={index}
+          className={`message ${
+            msg.author === currentUser ? "sent" : "received"
+          }`}
+        >
+          <p>{msg.body}</p>
+        </div>
+      ))}
     </div>
   );
 }
