@@ -13,13 +13,7 @@ class ZajelGroupViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
 
         user = request.user
-        # # Filter groups where the user is a member
         groups_this_user_is_in = ZajelGroup.objects.filter(members=user)
-
-        # # Debug print to see the groups
-        print(groups_this_user_is_in)
-
-        # # Update the queryset to only include these groups
         self.queryset = groups_this_user_is_in
 
         return super().list(request, *args, **kwargs)
