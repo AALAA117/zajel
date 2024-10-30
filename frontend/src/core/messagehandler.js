@@ -21,9 +21,9 @@ export const handleSendMessage = (message, sendMessageRef, setMessages, ws) => {
 
   sendMessage();
 
-  if (sendMessageRef.current) {
-    sendMessageRef.current(message.body);
-  }
+  // if (sendMessageRef.current) {
+  //   sendMessageRef.current(message.body);
+  // }
 };
 
 export const handleReceiveMessage = (message, setMessages) => {

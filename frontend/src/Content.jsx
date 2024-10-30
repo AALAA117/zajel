@@ -1,21 +1,19 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useEffect, useState } from "react";
 import Public_chat from "./Publicchat";
-import api from "./core/api";
+import useAxios from "./utils/useAxios";
 import Footer from "./Footer";
 
 function ContentTable({ onSelectChat }) {
   const [groups, setGroups] = useState([]);
+  const api = useAxios();
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
         console.log(localStorage.getItem("authTokens"));
-        const response = await api({
-          method: "GET",
-          url: "chat/api/groups/",
-        });
-        console.log("\n\n\n response: ",response , "\n\n\n")
+        const response = await api.get("/chat/api/groups/");
+        console.log("response:", response);
         const data = response.data;
         console.log("fetched groups:", data);
         setGroups(data);
@@ -24,13 +22,14 @@ function ContentTable({ onSelectChat }) {
           console.error("Response data:", error.response.data);
           console.error("Response status:", error.response.status);
           console.error("Response headers:", error.response.headers);
-      } else {
+        } else {
           console.error("Error", error.message);
         }
       }
     };
     fetchGroups();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Add an empty array here to prevent re-runs
 
   const handleChatClick = (group) => {
     onSelectChat({
