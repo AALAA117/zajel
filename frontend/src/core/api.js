@@ -1,10 +1,11 @@
 import axios from "axios";
 
-export const ADDRESS = "localhost:8000";
+export const ADDRESS = "http://localhost:8000";
 const api = axios.create({
-  baseURL: "http://" + ADDRESS,
+  baseURL: ADDRESS,
   headers: {
     "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem("authTokens")}`,
   },
 });
 

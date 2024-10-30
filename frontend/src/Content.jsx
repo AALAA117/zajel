@@ -10,15 +10,23 @@ function ContentTable({ onSelectChat }) {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
+        console.log(localStorage.getItem("authTokens"));
         const response = await api({
           method: "GET",
-          url: "/api/groups/",
+          url: "chat/api/groups/",
         });
+        console.log("\n\n\n response: ",response , "\n\n\n")
         const data = response.data;
         console.log("fetched groups:", data);
         setGroups(data);
       } catch (error) {
-        console.error("Error fetching groups", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+          console.error("Response headers:", error.response.headers);
+      } else {
+          console.error("Error", error.message);
+        }
       }
     };
     fetchGroups();

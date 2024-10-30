@@ -3,22 +3,30 @@ from .models import ZajelGroup, ZajelMessage
 from .serializers import ZajelGroupSerializer, ZajelMessageSerializer
 from rest_framework import status
 from rest_framework.response import Response
-
+import pprint
 
 class ZajelGroupViewSet(viewsets.ModelViewSet):
     queryset = ZajelGroup.objects.filter()
     serializer_class = ZajelGroupSerializer
 
     def list(self, request, *args, **kwargs):
-        user = self.request.user
-        # Filter groups where the user is a member
-        groups_this_user_is_in = ZajelGroup.objects.filter(members=user)
 
-        # Debug print to see the groups
-        print(groups_this_user_is_in)
+        # print("\n\nRequest Representation:")
+        # pprint.pprint(vars(request))  # Pretty print the request object attributes
+        # print("\n\n")
+        # print("args : ",args)
+        # print("kwargs : ",kwargs)
+        # print("\n\n")
 
-        # Update the queryset to only include these groups
-        self.queryset = groups_this_user_is_in
+        # user = self.request.user
+        # # Filter groups where the user is a member
+        # groups_this_user_is_in = ZajelGroup.objects.filter(members=user)
+
+        # # Debug print to see the groups
+        # print(groups_this_user_is_in)
+
+        # # Update the queryset to only include these groups
+        # self.queryset = groups_this_user_is_in
 
         return super().list(request, *args, **kwargs)
 
