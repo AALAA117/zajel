@@ -1,0 +1,7 @@
+# virtual environment
+env/
+# pycache files
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
