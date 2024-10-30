@@ -1,4 +1,4 @@
-.upperpart{
+.upperpart {
   background-color: #00416a;
   height: 80px;
   display: flex;
@@ -6,46 +6,15 @@
   align-items: center;
 }
 
-.upperpart .title{
+.upperpart .title {
   margin-left: 60px;
   padding-bottom: 10px;
   font-size: 50px;
-  color:aliceblue;
+  color: aliceblue;
 }
 
-.upperpart .personal-container {
-  position: relative; /* Position relative for dropdown positioning */
-}
-
-.upperpart .personal{
-  margin-left: 1090%;
-  border-radius: 20%;
-  background-color: aliceblue;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s;
-}
-
-.upperpart .personal:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-}
-
-.dropdown {
-  position: absolute;
-  top: 50px;
-  background-color: rgb(233, 243, 255);
-  border: 1px solid #00416a;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  width: 250px;
-  margin-left: 900%;
-  
-}
-
-
-.upperpart .logout{
-  margin-right: 150px;
+.upperpart .logout {
+  margin-right: 100px;
   border-radius: 20%;
   background-color: aliceblue;
   cursor: pointer;
@@ -62,24 +31,23 @@
   height: calc(100vh - 120px);
 }
 
-.contenttable{
+.contenttable {
   background-color: rgb(214, 224, 224);
   width: 25%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  
 }
 
 .contenttable .search-bar {
   width: 99.5%;
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 10px;
-
 }
 
-.contentchat, .publicchat{
-  background-color:antiquewhite;
+.contentchat,
+.publicchat {
+  background-color: antiquewhite;
   height: 80px;
   width: 99.5%;
   border: 1px solid hsl(0, 0%, 80%);
@@ -89,13 +57,15 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.contentchat:hover, .publicchat:hover {
+.contentchat:hover,
+.publicchat:hover {
   background-color: #e1d3b9;
   transform: scale(1.02);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.contentchat .contentchat-image, .publicchat .publicchat-image{
+.contentchat .contentchat-image,
+.publicchat .publicchat-image {
   border-radius: 50%;
   width: 70px;
   height: 70px;
@@ -103,9 +73,8 @@
   margin-top: 5px;
 }
 
-
-
-.contentchat .contentchat-name, .publicchat .publicchat-name{
+.contentchat .contentchat-name,
+.publicchat .publicchat-name {
   padding-left: 20px;
   font-weight: bold;
   font-size: 1.8rem;
@@ -113,14 +82,15 @@
   display: flex;
 }
 
-.contentchat .contentchat-lastmessage, .publicchat .publicchat-lastmessage{
+.contentchat .contentchat-lastmessage,
+.publicchat .publicchat-lastmessage {
   padding-top: 35px;
   color: gray;
   font-size: 0.95rem;
   margin: 5px 0 0 0;
 }
 
-.lowerpart{
+.lowerpart {
   width: 100%;
   height: 5px;
   margin-top: auto;
@@ -143,7 +113,6 @@
   border-bottom: 1px solid #ccc;
   background-color: #b3c8f0;
   display: flex;
-
 }
 
 .chat-messages {

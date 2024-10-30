@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useHistory } from "react-router-dom";
-import swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
+import swal from "sweetalert2";
 
 const AuthContext = createContext();
 
@@ -16,21 +16,21 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(() =>
     localStorage.getItem("authTokens")
-      ? jwt_decode(localStorage.getItem("authTokens"))
+      ? jwtDecode(localStorage.getItem("authTokens"))
       : null
   );
 
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const history = useHistory();
-
-  const loginUser = async (email, password) => {
-    const response = await fetch("http://127.0.0.1:8000/api/token/", {
+  const loginUser = async (username, email, password) => {
+    const response = await fetch("http://127.0.0.1:8000/user/api/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        username,
         email,
         password,
       }),
@@ -41,9 +41,11 @@ export const AuthProvider = ({ children }) => {
     if (response.status === 200) {
       console.log("Logged In");
       setAuthTokens(data);
-      setUser(jwt_decode(data.access));
+      //decode access token to get user info
+      setUser(jwtDecode(data.access));
+      //save access token in local storage
       localStorage.setItem("authTokens", JSON.stringify(data));
-      history.push("/");
+      navigate("/");
       swal.fire({
         title: "Login Successful",
         icon: "success",
@@ -68,21 +70,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const registerUser = async (email, username, password, password2) => {
-    const response = await fetch("http://127.0.0.1:8000/api/register/", {
+  const registerUser = async (username, email, password1, password2) => {
+    const requestbody = {
+      username,
+      email,
+      password1,
+      password2,
+    };
+    console.log("body", requestbody);
+    const response = await fetch("http://127.0.0.1:8000/user/api/signup/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
         username,
-        password,
+        email,
+        password1,
         password2,
       }),
     });
     if (response.status === 201) {
-      history.push("/login");
+      navigate("/login");
       swal.fire({
         title: "Registration Successful, Login Now",
         icon: "success",
@@ -93,8 +102,9 @@ export const AuthProvider = ({ children }) => {
         showConfirmButton: false,
       });
     } else {
+      const errorResponse = await response.json();
       console.log(response.status);
-      console.log("there was a server issue");
+      console.log("there was a server issue", errorResponse);
       swal.fire({
         title: "An Error Occured " + response.status,
         icon: "error",
@@ -111,7 +121,7 @@ export const AuthProvider = ({ children }) => {
     setAuthTokens(null);
     setUser(null);
     localStorage.removeItem("authTokens");
-    history.push("/login");
+    navigate("/login");
     swal.fire({
       title: "YOu have been logged out...",
       icon: "success",
@@ -135,7 +145,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (authTokens) {
-      setUser(jwt_decode(authTokens.access));
+      setUser(jwtDecode(authTokens.access));
     }
     setLoading(false);
   }, [authTokens, loading]);

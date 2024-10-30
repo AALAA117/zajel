@@ -1,5 +1,5 @@
 """
-WSGI config for zajel_project project.
+WSGI config for a_core project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
