@@ -1,31 +1,3 @@
-.upperpart {
-  background-color: #00416a;
-  height: 80px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.upperpart .title {
-  margin-left: 60px;
-  padding-bottom: 10px;
-  font-size: 50px;
-  color: aliceblue;
-}
-
-.upperpart .logout {
-  margin-right: 100px;
-  border-radius: 20%;
-  background-color: aliceblue;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s;
-}
-
-.upperpart .logout:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-}
-
 .app-container {
   display: flex;
   height: calc(100vh - 120px);
@@ -39,10 +11,56 @@
   flex-direction: column;
 }
 
-.contenttable .search-bar {
-  width: 99.5%;
-  border: 1px solid hsl(0, 0%, 80%);
-  border-radius: 10px;
+.searchcreate {
+  display: flex;
+  width: 100%;
+}
+
+.search-bar {
+  flex: 0 0 70%;
+  position: relative;
+}
+
+.search-bar input {
+  width: 92%;
+  padding: 10px;
+  border: 1px solid hsl(215, 47%, 57%);
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.create-group {
+  flex: 0 0 30%;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-main {
+  width: 100%;
+  height: 40px;
+  background-color: hsl(215, 47%, 57%);
+  border: 1px solid hsl(215, 47%, 57%);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.button-main:hover {
+  background-color: hsl(215, 51%, 36%);
+}
+
+.contenttable .dropdown-menu {
+  margin-left: -266px;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 357px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px; /* Padding inside the dropdown */
 }
 
 .contentchat,

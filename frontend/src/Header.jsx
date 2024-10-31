@@ -3,6 +3,7 @@ import axios from "axios";
 import LOGOUT from "./assets/logout.webp";
 import Default from "./assets/default.jpeg";
 import AuthContext from "./context/AuthContext";
+import Friendlist from "./Friendlist";
 import "./Header.css";
 
 function Header() {
@@ -154,117 +155,120 @@ function Header() {
   return (
     <header className="upperpart">
       <h1 className="title">zajel</h1>
-      <div className="personal-container">
-        <button className="personal" onClick={toggleDropdown}>
-          <img
-            src={userData?.image || Default}
-            alt="personal_page"
-            width="35"
-            height="35"
-          />
-        </button>
-        {isDropdownOpen && (
-          <div className="dropdown" ref={dropdownRef}>
-            {userData && (
-              <div className="user-info">
-                <img
-                  src={userData.image || Default}
-                  alt="User"
-                  className="user-image"
-                />
-                <div className="user-details">
-                  <p className="user-name">Name: {userData.name}</p>
-                  <p className="user-info">Info: {userData.info}</p>
+      <div className="button-container">
+        <Friendlist />
+        <div className="personal-container">
+          <button className="personal" onClick={toggleDropdown}>
+            <img
+              src={userData?.image || Default}
+              alt="personal_page"
+              width="35"
+              height="35"
+            />
+          </button>
+          {isDropdownOpen && (
+            <div className="dropdown" ref={dropdownRef}>
+              {userData && (
+                <div className="user-info">
+                  <img
+                    src={userData.image || Default}
+                    alt="User"
+                    className="user-image"
+                  />
+                  <div className="user-details">
+                    <p className="user-name">Name: {userData.name}</p>
+                    <p className="user-info">Info: {userData.info}</p>
+                  </div>
                 </div>
+              )}
+              <div className="dropdown-buttons">
+                <button onClick={handleEditPhoto} className="dropdown-item">
+                  Edit Photo
+                </button>
+                <button onClick={handleEditUsername} className="dropdown-item">
+                  Edit Username
+                </button>
+                <button onClick={handleEditInfo} className="dropdown-item">
+                  Edit Info
+                </button>
               </div>
-            )}
-            <div className="dropdown-buttons">
-              <button onClick={handleEditPhoto} className="dropdown-item">
-                Edit Photo
-              </button>
-              <button onClick={handleEditUsername} className="dropdown-item">
-                Edit Username
-              </button>
-              <button onClick={handleEditInfo} className="dropdown-item">
-                Edit Info
-              </button>
+
+              {isEditingPhoto && (
+                <div className="edit-photo-form">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                  <button onClick={handlePhotoUpload} className="submit-button">
+                    Upload
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={() => setIsEditingPhoto(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+
+              {isEditingUsername && (
+                <form
+                  onSubmit={handleSubmitUsernameChange}
+                  className="edit-username-form"
+                >
+                  <input
+                    type="text"
+                    value={newUsername}
+                    onChange={handleUsernameChange}
+                    placeholder="Enter new username"
+                    required
+                  />
+                  <button type="submit" className="submit-button">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={() => setIsEditingUsername(false)}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
+
+              {isEditingInfo && (
+                <form
+                  onSubmit={handleSubmitInfoChange}
+                  className="edit-info-form"
+                >
+                  <input
+                    type="text"
+                    value={newInfo}
+                    onChange={handleInfoChange}
+                    placeholder="Enter new info"
+                    required
+                  />
+                  <button type="submit" className="submit-button">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={() => setIsEditingInfo(false)}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
             </div>
-
-            {isEditingPhoto && (
-              <div className="edit-photo-form">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-                <button onClick={handlePhotoUpload} className="submit-button">
-                  Upload
-                </button>
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() => setIsEditingPhoto(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
-
-            {isEditingUsername && (
-              <form
-                onSubmit={handleSubmitUsernameChange}
-                className="edit-username-form"
-              >
-                <input
-                  type="text"
-                  value={newUsername}
-                  onChange={handleUsernameChange}
-                  placeholder="Enter new username"
-                  required
-                />
-                <button type="submit" className="submit-button">
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() => setIsEditingUsername(false)}
-                >
-                  Cancel
-                </button>
-              </form>
-            )}
-
-            {isEditingInfo && (
-              <form
-                onSubmit={handleSubmitInfoChange}
-                className="edit-info-form"
-              >
-                <input
-                  type="text"
-                  value={newInfo}
-                  onChange={handleInfoChange}
-                  placeholder="Enter new info"
-                  required
-                />
-                <button type="submit" className="submit-button">
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() => setIsEditingInfo(false)}
-                >
-                  Cancel
-                </button>
-              </form>
-            )}
-          </div>
-        )}
+          )}
+        </div>
+        <button className="logout" onClick={handleLogout}>
+          <img src={LOGOUT} alt="Logout" width="35" height="35" />
+        </button>
       </div>
-      <button className="logout" onClick={handleLogout}>
-        <img src={LOGOUT} alt="Logout" width="35" height="35" />
-      </button>
     </header>
   );
 }
