@@ -20,7 +20,7 @@ function CreateGroupButton() {
 
   const createGroup = async () => {
     try {
-      // send the create to the back 
+      // send the create to the back
       const response = await axios.post(
         "http://127.0.0.1:8000/chat/api/groups/",
         { userIds: selectedFriends },

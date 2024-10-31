@@ -1,6 +1,6 @@
 /* Header.css */
 
-.upperpart{
+.upperpart {
   background-color: #00416a;
   height: 80px;
   display: flex;
@@ -8,11 +8,11 @@
   align-items: center;
 }
 
-.upperpart .title{
+.upperpart .title {
   margin-left: 60px;
   padding-bottom: 10px;
   font-size: 50px;
-  color:aliceblue;
+  color: aliceblue;
 }
 
 .upperpart .button-container {
@@ -25,7 +25,7 @@
   position: relative; /* Position relative for dropdown positioning */
 }
 
-.upperpart .personal{
+.upperpart .personal {
   /* margin-right: 2px ; */
   border-radius: 20%;
   background-color: aliceblue;
@@ -73,7 +73,8 @@
   padding: 10px;
 }
 
-.user-name, .user-info {
+.user-name,
+.user-info {
   margin: 0;
   font-size: 14px;
   color: #495057;
@@ -160,7 +161,7 @@
   position: relative;
 }
 
-.upperpart .friendbutton{
+.upperpart .friendbutton {
   /* margin-left: 90%; */
   border-radius: 20%;
   background-color: aliceblue;

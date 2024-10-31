@@ -8,6 +8,7 @@ import SearchBar from "./SearchBar";
 
 function ContentTable({ onSelectChat }) {
   const [groups, setGroups] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [searchResults, setSearchResults] = useState([]);
   const api = useAxios();
 
