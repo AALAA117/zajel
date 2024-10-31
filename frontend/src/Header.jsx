@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import LOGOUT from "./assets/logout.webp";
 import Default from "./assets/default.jpeg";
 import AuthContext from "./context/AuthContext";
-import { useContext } from "react";
+import "./Header.css";
 
 function Header() {
-  // const history = useNavigate();
   const { logoutUser } = useContext(AuthContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -15,18 +13,19 @@ function Header() {
   const [newInfo, setNewInfo] = useState("");
   const [isEditingPhoto, setIsEditingPhoto] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isEditingUsername, setIsEditingUsername] = useState(false); // State for editing username
-  const [newUsername, setNewUsername] = useState(""); // State for new username
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
   const dropdownRef = useRef(null);
+  const { authTokens } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://your-backend-endpoint/user-data",
+          "http://localhost:8000/user/api/profile/",
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+              Authorization: `Bearer ${authTokens?.access}`,
             },
           }
         );
@@ -37,7 +36,7 @@ function Header() {
     };
 
     fetchUserData();
-  }, []);
+  }, [authTokens]);
 
   const handleLogout = () => {
     logoutUser();
@@ -52,7 +51,7 @@ function Header() {
       setIsDropdownOpen(false);
       setIsEditingInfo(false);
       setIsEditingPhoto(false);
-      setIsEditingUsername(false); // Close username editing
+      setIsEditingUsername(false);
     }
   };
 
@@ -64,63 +63,61 @@ function Header() {
   }, []);
 
   const handleEditPhoto = () => {
-    setIsEditingPhoto(true); // Open photo editing interface
+    setIsEditingPhoto(true);
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]); // Set the selected file
+    setSelectedFile(e.target.files[0]);
   };
 
   const handlePhotoUpload = async () => {
-    if (!selectedFile) return; // Do nothing if no file is selected
+    if (!selectedFile) return;
 
     const formData = new FormData();
-    formData.append("photo", selectedFile); // Append the file to the form data
+    formData.append("image", selectedFile);
 
     try {
       const response = await axios.put(
-        "https://your-backend-endpoint/update-photo",
+        `http://localhost:8000/user/api/profile/${authTokens?.user.pk}/`,
         formData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
-      setUserData(response.data); // Update user data with the new photo
-      setIsEditingPhoto(false); // Close the photo editing interface
-      setSelectedFile(null); // Clear the selected file
+      setUserData((prev) => ({ ...prev, image: response.data.image }));
+      setIsEditingPhoto(false);
+      setSelectedFile(null);
     } catch (error) {
       console.error("Error uploading photo:", error);
     }
   };
 
   const handleEditUsername = () => {
-    setIsEditingUsername(true); // Open username editing interface
-    setNewUsername(userData.username); // Set current username as new username
+    setIsEditingUsername(true);
+    setNewUsername(userData.username);
   };
 
   const handleUsernameChange = (e) => {
-    setNewUsername(e.target.value); // Update state with new username input
+    setNewUsername(e.target.value);
   };
 
   const handleSubmitUsernameChange = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "https://your-backend-endpoint/update-username",
-        {
-          username: newUsername,
-        },
+        `http://localhost:8000/user/api/profile/${authTokens?.user.pk}/`, // Adjust the endpoint accordingly
+        { displayname: newUsername },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
           },
         }
       );
-      setUserData(response.data); // Update user data with new username
-      setIsEditingUsername(false); // Close username editing interface
+      setUserData(response.data);
+      setIsEditingUsername(false);
     } catch (error) {
       console.error("Error updating username:", error);
     }
@@ -139,18 +136,16 @@ function Header() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "https://your-backend-endpoint/update-info",
-        {
-          info: newInfo,
-        },
+        `http://localhost:8000/user/api/profile/${authTokens?.user.pk}/`, // Adjust the endpoint accordingly
+        { info: newInfo },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
           },
         }
       );
       setUserData(response.data);
-      setIsEditingInfo(false); // Close info editing interface
+      setIsEditingInfo(false);
     } catch (error) {
       console.error("Error updating info:", error);
     }
