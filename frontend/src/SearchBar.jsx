@@ -1,27 +1,24 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function SearchBar({ setSearchResults }) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const handleSearch = async (event) => {
     const searchTerm = event.target.value;
     setQuery(searchTerm);
-
+    
     // API for search bar need data for all the users
     if (searchTerm.length > 2) {
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/user/api/user/?query=${searchTerm}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://127.0.0.1:8000/user/api/user/?query=${searchTerm}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          },
+        });
         setSearchResults(response.data); // Expecting the response to include user details and friendship status
       } catch (err) {
-        console.error("Error fetching search results:", err);
+        console.error('Error fetching search results:', err);
       }
     } else {
       setSearchResults([]);
@@ -30,18 +27,14 @@ function SearchBar({ setSearchResults }) {
 
   const handleSendFriendRequest = async (userId) => {
     try {
-      await axios.post(
-        `http://127.0.0.1:8000/friends/api/friends_requests/`,
-        { userId },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-      alert("Friend request sent!");
+      await axios.post(`http://127.0.0.1:8000/friends/api/friends_requests/`, { userId }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+      alert('Friend request sent!');
     } catch (err) {
-      console.error("Error sending friend request:", err);
+      console.error('Error sending friend request:', err);
     }
   };
 
@@ -54,12 +47,7 @@ function SearchBar({ setSearchResults }) {
         placeholder="Search"
       />
       <ul className="search-results">
-        {query.length > 2 && (
-          <SearchResults
-            searchResults={setSearchResults}
-            handleSendFriendRequest={handleSendFriendRequest}
-          />
-        )}
+        {query.length > 2 && <SearchResults searchResults={setSearchResults} handleSendFriendRequest={handleSendFriendRequest} />}
       </ul>
     </div>
   );
@@ -68,15 +56,13 @@ function SearchBar({ setSearchResults }) {
 const SearchResults = ({ searchResults, handleSendFriendRequest }) => {
   return (
     <div>
-      {searchResults.map((user) => (
+      {searchResults.map(user => (
         <li key={user.id}>
-          {user.name}
+          {user.name} 
           {user.isFriend ? (
             <span> (Friend)</span>
           ) : (
-            <button onClick={() => handleSendFriendRequest(user.id)}>
-              Send Friend Request
-            </button>
+            <button onClick={() => handleSendFriendRequest(user.id)}>Send Friend Request</button>
           )}
         </li>
       ))}
