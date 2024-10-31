@@ -11,7 +11,7 @@ function SearchBar({ setSearchResults }) {
     // API for search bar need data for all the users
     if (searchTerm.length > 2) {
       try {
-        const response = await axios.get(`https://your-backend-endpoint/search?query=${searchTerm}`, {
+        const response = await axios.get(`http://127.0.0.1:8000/user/api/user/?query=${searchTerm}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
@@ -27,7 +27,7 @@ function SearchBar({ setSearchResults }) {
 
   const handleSendFriendRequest = async (userId) => {
     try {
-      await axios.post(`https://your-backend-endpoint/send-friend-request`, { userId }, {
+      await axios.post(`http://127.0.0.1:8000/friends/api/friends_requests/`, { userId }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
@@ -47,16 +47,16 @@ function SearchBar({ setSearchResults }) {
         placeholder="Search"
       />
       <ul className="search-results">
-        {query && <SearchResults setSearchResults={setSearchResults} handleSendFriendRequest={handleSendFriendRequest} />}
+        {query.length > 2 && <SearchResults searchResults={setSearchResults} handleSendFriendRequest={handleSendFriendRequest} />}
       </ul>
     </div>
   );
 }
 
-const SearchResults = ({ setSearchResults, handleSendFriendRequest }) => {
+const SearchResults = ({ searchResults, handleSendFriendRequest }) => {
   return (
     <div>
-      {setSearchResults.map(user => (
+      {searchResults.map(user => (
         <li key={user.id}>
           {user.name} 
           {user.isFriend ? (

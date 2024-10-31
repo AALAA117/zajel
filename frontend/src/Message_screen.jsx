@@ -1,8 +1,16 @@
 // MessageScreen.jsx
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./Message_screen.css";
 
 function MessageScreen({ messages, currentUser }) {
+  const messagesEndRef = useRef(null);
+
+  // Scroll to the bottom of the chat whenever messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   return (
     <div className="chat-messages">
       {messages.map((msg, index) => (
@@ -12,9 +20,10 @@ function MessageScreen({ messages, currentUser }) {
             msg.author === currentUser ? "sent" : "received"
           }`}
         >
-          <p>{msg.body}</p>
+          <p className="pcolor">{msg.body}</p>
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

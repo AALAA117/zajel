@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Headerchat from "./Header_chat";
 import Messagebar from "./Messagebar";
 import MessageScreen from "./Message_screen";
@@ -9,7 +9,7 @@ import useAxios from "./utils/useAxios";
 
 function Chat({ contact }) {
   const [messages, setMessages] = useState([]);
-  const sendMessageRef = useRef(null);
+  // const sendMessageRef = useRef(null);
   const api = useAxios();
   const authTokens = localStorage.getItem("authTokens");
   console.log("token", authTokens);
@@ -33,15 +33,19 @@ function Chat({ contact }) {
     fetchMessages();
     // Ensure ws is initialized before setting event handlers
     if (ws) {
-      ws.onopen = () => {
-        console.log("WebSocket connection established.");
-        ws.send(JSON.stringify({ action: "subscribe", room: contact.name }));
-      };
+      // ws.onopen = () => {
+      //   console.log("WebSocket connection established.");
+      //   ws.send(JSON.stringify({ action: "subscribe", room: contact.name }));
+      // };
 
       ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log("Received message from server:", message);
-        handleReceiveMessage(message, setMessages);
+        console.log("Received message from server:", message.message);
+        if (message) {
+          handleReceiveMessage(message, setMessages);
+        } else {
+          console.warn("Received message without content:", message);
+        }
       };
 
       ws.onclose = () => {
@@ -53,18 +57,19 @@ function Chat({ contact }) {
       };
     }
 
-    return () => {
-      if (ws && ws.readyState === 1) {
-        ws.send(JSON.stringify({ action: "unsubscribe", room: contact.name }));
-        ws.close();
-      }
-    };
+    // return () => {
+    //   if (ws && ws.readyState === 1) {
+    //     ws.send(JSON.stringify({ action: "unsubscribe", room: contact.name }));
+    //     ws.close();
+    //   }
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contact, ws]);
   return (
     <div className="chatbox">
       <Headerchat contact={contact} />
       <MessageScreen messages={messages} currentUser={UserId} />
+
       <Messagebar
         onSendMessage={(message) => {
           if (isWsOpen) {
@@ -72,7 +77,7 @@ function Chat({ contact }) {
               body: message,
               author: UserId,
             };
-            handleSendMessage(message, sendMessageRef, setMessages, ws);
+            handleSendMessage(message, ws);
           } else {
             console.error("WebSocket is not open. Cannot send message.");
           }
