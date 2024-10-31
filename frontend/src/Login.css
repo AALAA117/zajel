@@ -5,7 +5,7 @@
 .form{
     background-color: #ffffff;
     width: 400px;
-    height: 300px; 
+    height: 330px; 
     justify-content: center;
     align-items: center;
     margin-top: 10%;
@@ -19,6 +19,15 @@
 .form h1, p{
     background-color: #ffffff;
 }
+
+.form .username {
+    width:80%;
+    height:10%;
+    border-radius: 10px;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
 .form .email {
     width:80%;
     height:10%;
@@ -36,7 +45,7 @@
 }
 .form .loginbutton{
     width: 40%;
-    height: 15%;
+    height: 45px;
     margin-top: 30px;
     border-radius: 20px;
     background-color: #00416a;

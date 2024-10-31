@@ -22,7 +22,7 @@ function CreateGroupButton() {
     try {
       // send the create to the back 
       const response = await axios.post(
-        "https",
+        "http://127.0.0.1:8000/chat/api/groups/",
         { userIds: selectedFriends },
         {
           headers: {
@@ -50,7 +50,7 @@ function CreateGroupButton() {
     if (showDropdown) {
       // api to get friend list
       axios
-        .get("https", {
+        .get("http://127.0.0.1:8000/friends/list/", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },

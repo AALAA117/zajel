@@ -3,6 +3,7 @@ import axios from "axios";
 import LOGOUT from "./assets/logout.webp";
 import Default from "./assets/default.jpeg";
 import AuthContext from "./context/AuthContext";
+import Friendlist from "./Friendlist";
 import "./Header.css";
 
 function Header() {
@@ -154,6 +155,8 @@ function Header() {
   return (
     <header className="upperpart">
       <h1 className="title">zajel</h1>
+      <div className="button-container">
+      <Friendlist />
       <div className="personal-container">
         <button className="personal" onClick={toggleDropdown}>
           <img
@@ -265,6 +268,7 @@ function Header() {
       <button className="logout" onClick={handleLogout}>
         <img src={LOGOUT} alt="Logout" width="35" height="35" />
       </button>
+      </div>
     </header>
   );
 }

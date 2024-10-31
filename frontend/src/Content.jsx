@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import Public_chat from "./Publicchat";
 import useAxios from "./utils/useAxios";
 import Footer from "./Footer";
+import CreateGroupButton from "./Create";
+import SearchBar from "./SearchBar";
 
 function ContentTable({ onSelectChat }) {
   const [groups, setGroups] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const api = useAxios();
 
   useEffect(() => {
@@ -40,6 +43,10 @@ function ContentTable({ onSelectChat }) {
   };
   return (
     <div className="contenttable">
+      <div className="searchcreate">
+        <SearchBar setSearchResults={setSearchResults} />
+        <CreateGroupButton />
+      </div>
       {groups.map((group) => (
         <div
           key={group.id}
