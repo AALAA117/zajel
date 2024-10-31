@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Picker from "@emoji-mart/react";
-// import data from "@emoji-mart/data";
+import data from "@emoji-mart/data";
 
 function Messagebar({ onSendMessage }) {
   const [message, setMessage] = useState("");
