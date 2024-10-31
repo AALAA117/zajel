@@ -117,20 +117,35 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logoutUser = () => {
-    setAuthTokens(null);
-    setUser(null);
-    localStorage.removeItem("authTokens");
-    navigate("/login");
-    swal.fire({
-      title: "YOu have been logged out...",
-      icon: "success",
-      toast: true,
-      timer: 6000,
-      position: "top-right",
-      timerProgressBar: true,
-      showConfirmButton: false,
-    });
+  const logoutUser = async () => {
+    try {
+      console.log("access", authTokens.access);
+      if (authTokens) {
+        await fetch("http://127.0.0.1:8000/user/api/logout/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authTokens.access}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setAuthTokens(null);
+      setUser(null);
+      localStorage.removeItem("authTokens");
+      navigate("/login");
+      swal.fire({
+        title: "YOu have been logged out...",
+        icon: "success",
+        toast: true,
+        timer: 6000,
+        position: "top-right",
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+    }
   };
 
   const contextData = {

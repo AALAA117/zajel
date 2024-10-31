@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LOGOUT from "./assets/logout.webp";
 import Default from "./assets/default.jpeg";
+import AuthContext from "./context/AuthContext";
+import { useContext } from "react";
 
-function Header({ onlogout }) {
-  const history = useNavigate();
+function Header() {
+  // const history = useNavigate();
+  const { logoutUser } = useContext(AuthContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
@@ -37,8 +40,7 @@ function Header({ onlogout }) {
   }, []);
 
   const handleLogout = () => {
-    onlogout();
-    history.push("/login");
+    logoutUser();
   };
 
   const toggleDropdown = () => {
