@@ -67,6 +67,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json.get("message")
 
         # Log user authentication status
+        print("message recieved", message)
         print(f"User authenticated: {self.scope['user'].is_authenticated}")
         print(f"Username: {self.scope['user']}")
 
@@ -82,7 +83,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 "type": "chat_message",
                 "message": message,
-                "author": user.username if user.is_authenticated else "Anonymous",
+                "author": user.id if user.is_authenticated else "Anonymous",
             },
         )
 

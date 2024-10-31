@@ -1,9 +1,8 @@
-export const handleSendMessage = (message, sendMessageRef, setMessages, ws) => {
-  // console.log(type(message));
+export const handleSendMessage = (message, ws) => {
   console.log(message);
 
-  const newMessage = { body: message.body, author: message.author };
-  setMessages((prevMessages) => [...prevMessages, newMessage]);
+  // const newMessage = { body: message.body, author: message.author };
+  // setMessages((prevMessages) => [...prevMessages, newMessage]);
 
   if (!ws) {
     console.error("WebSocket is not initialized. Message not sent.");
@@ -27,6 +26,6 @@ export const handleSendMessage = (message, sendMessageRef, setMessages, ws) => {
 };
 
 export const handleReceiveMessage = (message, setMessages) => {
-  const newMessage = { body: message.body, author: message.author };
+  const newMessage = { body: message.message, author: message.author };
   setMessages((prevMessages) => [...prevMessages, newMessage]);
 };
