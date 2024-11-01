@@ -31,7 +31,7 @@ def freinds_list(request):
 
 # Helper function to find active friend request
 def get_active_friend_request(sender, receiver):
-    return get_object_or_404(FriendRequest, sender=sender, receiver=receiver, is_active=True)
+    return get_object_or_404(FriendRequest, sender=sender, receiver=receiver)
 
 
 # API Views
@@ -77,7 +77,7 @@ def unfriend(request, *args, **kwargs):
 @api_view(['GET'])
 def list_all_incoming_requests(request):
     user = request.user
-    incoming_requests = FriendRequest.objects.filter(receiver=user, is_active=True)
+    incoming_requests = FriendRequest.objects.filter(receiver=user)
     serializer = FriendRequestSerializer(incoming_requests, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
