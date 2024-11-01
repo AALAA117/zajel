@@ -13,7 +13,7 @@ class Profile(models.Model):
         return self.user.username
 
     @property
-    def name(self):
+    def username(self):
         return self.displayname if self.displayname else self.user.username
 
     @property

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from a_users.views import *
-from  rest_framework.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter
 from dj_rest_auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordResetConfirmView,
     PasswordResetView, UserDetailsView,

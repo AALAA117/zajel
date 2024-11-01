@@ -30,7 +30,13 @@ function Header() {
             },
           }
         );
-        setUserData(response.data);
+
+        const data = response.data.find(
+          (profile) => profile.id === authTokens?.user.pk
+        );
+
+        console.log(data.displayname);
+        setUserData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -151,6 +157,7 @@ function Header() {
       console.error("Error updating info:", error);
     }
   };
+  console.log("userdata", userData);
 
   return (
     <header className="upperpart">
@@ -176,7 +183,7 @@ function Header() {
                     className="user-image"
                   />
                   <div className="user-details">
-                    <p className="user-name">Name: {userData.name}</p>
+                    <p className="user-name">Name: {userData.displayname}</p>
                     <p className="user-info">Info: {userData.info}</p>
                   </div>
                 </div>
