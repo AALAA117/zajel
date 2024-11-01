@@ -1,11 +1,7 @@
-/* *{
-    background-color: rgb(203, 211, 238);
-} */
-
 .form {
   background-color: #ffffff;
   width: 400px;
-  height: 300px;
+  height: 330px;
   justify-content: center;
   align-items: center;
   margin-top: 10%;
@@ -26,7 +22,7 @@ p {
   height: 10%;
   border-radius: 10px;
   padding-left: 20px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .form .email {
@@ -46,7 +42,7 @@ p {
 }
 .form .loginbutton {
   width: 40%;
-  height: 15%;
+  height: 45px;
   margin-top: 30px;
   border-radius: 20px;
   background-color: #00416a;

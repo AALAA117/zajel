@@ -160,7 +160,7 @@ function Header() {
   console.log("userdata", userData);
 
   return (
-    <header className="upperpart">
+    <headers className="upperpart">
       <h1 className="title">zajel</h1>
       <div className="button-container">
         <Friendlist />
@@ -276,7 +276,7 @@ function Header() {
           <img src={LOGOUT} alt="Logout" width="35" height="35" />
         </button>
       </div>
-    </header>
+    </headers>
   );
 }
 
