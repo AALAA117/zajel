@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import FriendList, FriendRequest
 from .serializers import FriendRequestSerializer, FriendListSerializer
-
+from a_users.serializers import UserSerializer
 
 # ViewSet for Friend Requests
 class FriendRequestViewSet(viewsets.ModelViewSet):
@@ -26,7 +26,15 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
 def freinds_list(request):
     user = request.user
     f_list = FriendList.objects.filter(user=user)
-    serialize = FriendListSerializer(f_list, many=True)
+    user_friend_list = FriendList.objects.get(user=user)
+    serialize = UserSerializer(user_friend_list.get_friends(), many=True)
+
+    # print("\n\n\n")
+    # print(user_friend_list.get_friends())
+    # for friend in user_friend_list.get_friends():
+    #     print(friend.__dict__)
+    # print("\n\n\n")
+
     return Response(serialize.data, status=status.HTTP_200_OK)
 
 
@@ -68,12 +76,22 @@ def cancel_request(request, *args, **kwargs):
     return Response({"cancelled": f"You have cancelled the friend request to {friend_request.receiver.username}"})
 
 
-@api_view(['POST'])
+@api_view(['DELETE', 'POST'])
 def unfriend(request, *args, **kwargs):
+    # print('\n' , args)
+    # print('\n' , kwargs)
+    # print("request", request)
+    # print("\n\n\nHello\n\n\n")
     user = request.user
+    print("\n\n\nuser", user)
+    
     deletee_id = kwargs.get('user_id')
     deletee = get_object_or_404(User, id=deletee_id)
-    user_friend_list = get_object_or_404(FriendList, user=user)
+    # user_friend_list = get_object_or_404(FriendList, user=user)
+    user_friend_list = FriendList.objects.get(user=user)
+    print("user_friend_list", user_friend_list)
+
+    print("\n\n\n")
     user_friend_list.unfriend(deletee)
 
     return Response({"deleted": f"You have unfriended {deletee.username} successfully"})

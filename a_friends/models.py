@@ -33,8 +33,8 @@ class FriendList(models.Model):
         return False
 
     def unfriend(self, removee):
-        self.remove_friend(removee)
         removee_friend_list = FriendList.objects.get(user=removee)
+        self.remove_friend(removee)
         removee_friend_list.remove_friend(self.user)
 
     def is_friend(self, acc):
@@ -50,6 +50,15 @@ class FriendList(models.Model):
                 return True
 
         return False
+
+    def __repr__(self):
+        return self.friends.all()
+
+    # def __str__(self):
+    #     return str(self.friends.all())
+        
+    def get_friends(self):
+        return self.friends.all()
 
 
 class FriendRequest(models.Model):

@@ -189,6 +189,9 @@ REST_FRAMEWORK = {
         # to enable session authentication for the browsable API
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_PERMISSION_CLASSES' : [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
