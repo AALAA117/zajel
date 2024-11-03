@@ -83,6 +83,14 @@ class FriendRequest(models.Model):
                 code=status.HTTP_400_BAD_REQUEST,
             )
 
+        if FriendRequest.objects.filter(
+            sender=self.receiver, receiver=self.sender, is_active=True
+        ).exists():
+            raise ValidationError(
+                {"error": "You already have an incoming request from this user"},
+                code=status.HTTP_403_FORBIDDEN,
+            )
+
     def accept(self):
         receiver_friend_list = FriendList.objects.get(user=self.receiver)
         sender_friend_list = FriendList.objects.get(user=self.sender)
