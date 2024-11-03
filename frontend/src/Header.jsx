@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import LOGOUT from "./assets/logout.webp";
 import AuthContext from "./context/AuthContext";
-import Friendlist from "./Friendlist";
+import Friendlist from "./friends/Friendlist";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 

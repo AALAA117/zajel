@@ -1,6 +1,6 @@
 import Header from "./Header.jsx";
-import ContentTable from "./Content.jsx";
-import Chat from "./Chat.jsx";
+import ContentTable from "./groups/Content.jsx";
+import Chat from "./chat/Chat.jsx";
 import { WebSocketProvider } from "./core/websocket.js";
 // import Bob from "./assets/bob.jpeg";
 import { useState } from "react";
