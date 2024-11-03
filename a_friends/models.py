@@ -99,6 +99,11 @@ class FriendRequest(models.Model):
                 code=status.HTTP_403_FORBIDDEN,
             )
 
+        if FriendList.objects.get(user=self.sender).is_friend(self.receiver):
+            raise ValidationError(
+                {"error": "You guys are already friends"},
+                code=status.HTTP_403_FORBIDDEN,
+            )
 
     def accept(self):
         receiver_friend_list = FriendList.objects.get(user=self.receiver)
