@@ -5,6 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 import pprint
 import jwt
+from django.db.models import Q
+
 
 class ZajelGroupViewSet(viewsets.ModelViewSet):
     queryset = ZajelGroup.objects.filter()
@@ -15,6 +17,16 @@ class ZajelGroupViewSet(viewsets.ModelViewSet):
         user = request.user
         groups_this_user_is_in = ZajelGroup.objects.filter(members=user)
         self.queryset = groups_this_user_is_in
+
+        # get the search query from the request
+        search_query = request.query_params.get('query', None)
+
+        if search_query:
+            # filter groups based on search query
+            groups_this_user_is_in = groups_this_user_is_in.filter(
+                Q(group_name__icontains=search_query))
+
+            self.queryset = groups_this_user_is_in
 
         return super().list(request, *args, **kwargs)
 

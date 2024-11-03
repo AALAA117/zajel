@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import FRIEND from "./assets/friend.jpg";
+import AuthContext from "./context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 function Friendlist() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -9,6 +11,10 @@ function Friendlist() {
   const [requestsOut, setRequestsOut] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const dropdownRef = useRef(null);
+  const { authTokens } = useContext(AuthContext);
+  console.log("token", authTokens);
+  const UserId = authTokens.user.pk;
+  console.log(UserId);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -34,7 +40,7 @@ function Friendlist() {
         "http://127.0.0.1:8000/friends/listRequests/",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
           },
         }
       );
@@ -42,7 +48,7 @@ function Friendlist() {
         "http://127.0.0.1:8000/friends/listOutGoingRequests/",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
           },
         }
       );
@@ -50,7 +56,7 @@ function Friendlist() {
         "http://127.0.0.1:8000/friends/list/",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
           },
         }
       );
@@ -70,11 +76,11 @@ function Friendlist() {
   const handleAcceptRequest = async (userId) => {
     try {
       await axios.post(
-        `http://127.0.0.1:8000/friends/accept/${userId}`,
+        `http://127.0.0.1:8000/friends/accept/${UserId}`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${authTokens?.access}`,
           },
         }
       );
@@ -86,9 +92,9 @@ function Friendlist() {
 
   const handleDeleteRequestSend = async (userId) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/friends/decline/${userId}`, {
+      await axios.post(`http://127.0.0.1:8000/friends/decline/${UserId}/`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${authTokens?.access}`,
         },
       });
       fetchFriendData(); // Refresh friend data after deletion
@@ -99,9 +105,9 @@ function Friendlist() {
 
   const handleDeleteRequestReceive = async (userId) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/friends/cancel/${userId}`, {
+      await axios.delete(`http://127.0.0.1:8000/friends/cancel/${UserId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${authTokens?.access}`,
         },
       });
       fetchFriendData(); // Refresh friend data after deletion
@@ -112,9 +118,9 @@ function Friendlist() {
 
   const handleDeleteFriend = async (userId) => {
     try {
-      await axios.delete(`https://api/friends/delete/${userId}`, {
+      await axios.delete(`https://api/friends/delete/${UserId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${authTokens?.access}`,
         },
       });
       fetchFriendData(); // Refresh friend data after deletion
