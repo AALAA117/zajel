@@ -12,8 +12,8 @@ router.register(r'friends_requests', views.FriendRequestViewSet,
 
 urlpatterns = [
     path("api/", include(router.urls)),
-    path('listRequests/', views.list_all_incoming_requests, name='listRequests'),
-    path('listOutGoingRequests/', views.list_all_outgoing_requests,
+    path('requests/', views.list_all_incoming_requests, name='listRequests'),
+    path('out/', views.list_all_outgoing_requests,
          name='listOutGoingRequests'),
     path('accept/<int:user_id>/', views.accept_request, name='accept'),
     path('decline/<int:sender_id>/', views.decline_request, name='decline'),
