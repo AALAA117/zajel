@@ -75,6 +75,14 @@ class FriendRequest(models.Model):
     def __str__(self):
         return self.sender.username
 
+    def validateFriendRequest(self, *args, **kwargs):
+
+        if self.sender == self.receiver:
+            raise ValidationError(
+                {"error": "You cannot send a friend request to yourself"},
+                code=status.HTTP_400_BAD_REQUEST,
+            )
+
     def accept(self):
         receiver_friend_list = FriendList.objects.get(user=self.receiver)
         sender_friend_list = FriendList.objects.get(user=self.sender)
