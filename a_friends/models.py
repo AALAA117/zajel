@@ -8,6 +8,7 @@ from rest_framework import status
 
 # Create your models here.
 
+
 class FriendList(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user"
@@ -56,7 +57,7 @@ class FriendList(models.Model):
 
     # def __str__(self):
     #     return str(self.friends.all())
-        
+
     def get_friends(self):
         return self.friends.all()
 
@@ -83,17 +84,13 @@ class FriendRequest(models.Model):
                 code=status.HTTP_400_BAD_REQUEST,
             )
 
-        if FriendRequest.objects.filter(
-            sender=self.receiver, receiver=self.sender, is_active=True
-        ).exists():
+        if FriendRequest.objects.filter(sender=self.receiver, receiver=self.sender).exists():
             raise ValidationError(
                 {"error": "You already have an incoming request from this user"},
                 code=status.HTTP_403_FORBIDDEN,
             )
 
-        if FriendRequest.objects.filter(
-            sender=self.sender, receiver=self.receiver, is_active=True
-        ).exists():
+        if FriendRequest.objects.filter(sender=self.sender, receiver=self.receiver).exists():
             raise ValidationError(
                 {"error": "You already sent a friend request to this user"},
                 code=status.HTTP_403_FORBIDDEN,
