@@ -32,8 +32,8 @@ export const WebSocketProvider = ({ children, roomName }) => {
         setIsWsOpen(true);
       };
 
-      ws.current.onclose = () => {
-        console.log("WebSocket closed");
+      ws.current.onclose = (event) => {
+        console.log("WebSocket fully closed", event.code);
         setIsWsOpen(false);
       };
 

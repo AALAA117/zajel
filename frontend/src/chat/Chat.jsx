@@ -51,9 +51,9 @@ function Chat({ contact }) {
         }
       };
 
-      ws.onclose = (event) => {
-        console.log("WebSocket closed", event.code);
-      };
+      // ws.onclose = (event) => {
+      //   console.log("WebSocket closed", event.code);
+      // };
 
       ws.onerror = (error) => {
         console.error("WebSocket error:", error);
@@ -74,6 +74,7 @@ function Chat({ contact }) {
 
       <Messagebar
         onSendMessage={(message) => {
+          console.log("WebSocket state before sending message:", ws.readyState);
           if (isWsOpen) {
             message = {
               body: message,
