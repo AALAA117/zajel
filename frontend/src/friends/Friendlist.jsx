@@ -3,7 +3,6 @@ import axios from "axios";
 import FRIEND from "../assets/friend.jpg";
 import publicphoto from "../assets/default.jpeg";
 import AuthContext from "../context/AuthContext";
-import { jwtDecode } from "jwt-decode";
 import "./Friendlist.css";
 
 function Friendlist() {
@@ -14,7 +13,6 @@ function Friendlist() {
   const [friendsList, setFriendsList] = useState([]);
   const dropdownRef = useRef(null);
   const { authTokens } = useContext(AuthContext);
-  const UserId = authTokens.user.pk;
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -33,11 +31,11 @@ function Friendlist() {
     };
   }, []);
 
-  // Function to fetch friend data from the backend
+  // Fetch friend data from the backend
   const fetchFriendData = async () => {
     try {
       const requestsInResponse = await axios.get(
-        "http://127.0.0.1:8000/friends/listRequests/",
+        "http://127.0.0.1:8000/friends/requests/",
         {
           headers: {
             Authorization: `Bearer ${authTokens?.access}`,
@@ -45,7 +43,7 @@ function Friendlist() {
         }
       );
       const requestsOutResponse = await axios.get(
-        "http://127.0.0.1:8000/friends/listOutGoingRequests/",
+        "http://127.0.0.1:8000/friends/out/",
         {
           headers: {
             Authorization: `Bearer ${authTokens?.access}`,
@@ -60,23 +58,24 @@ function Friendlist() {
           },
         }
       );
-      setRequestsIn(requestsInResponse.data);
-      setRequestsOut(requestsOutResponse.data);
-      setFriendsList(friendsListResponse.data);
+
+      setRequestsIn(requestsInResponse.data || []);
+      setRequestsOut(requestsOutResponse.data || []);
+      setFriendsList(friendsListResponse.data || []);
     } catch (error) {
       console.error("Error fetching friend data:", error);
     }
   };
 
   useEffect(() => {
-    fetchFriendData(); // Fetch data when the component mounts
+    fetchFriendData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAcceptRequest = async (userId) => {
     try {
       await axios.post(
-        `http://127.0.0.1:8000/friends/accept/${UserId}`,
+        `http://127.0.0.1:8000/friends/accept/${userId}/`,
         {},
         {
           headers: {
@@ -84,7 +83,7 @@ function Friendlist() {
           },
         }
       );
-      fetchFriendData(); // Refresh friend data after accepting request
+      fetchFriendData();
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -92,12 +91,16 @@ function Friendlist() {
 
   const handleDeleteRequestSend = async (userId) => {
     try {
-      await axios.post(`http://127.0.0.1:8000/friends/decline/${UserId}/`, {
-        headers: {
-          Authorization: `Bearer ${authTokens?.access}`,
-        },
-      });
-      fetchFriendData(); // Refresh friend data after deletion
+      await axios.post(
+        `http://127.0.0.1:8000/friends/decline/${userId}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${authTokens?.access}`,
+          },
+        }
+      );
+      fetchFriendData();
     } catch (error) {
       console.error("Error deleting friend request:", error);
     }
@@ -105,12 +108,12 @@ function Friendlist() {
 
   const handleDeleteRequestReceive = async (userId) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/friends/cancel/${UserId}`, {
+      await axios.delete(`http://127.0.0.1:8000/friends/cancel/${userId}/`, {
         headers: {
           Authorization: `Bearer ${authTokens?.access}`,
         },
       });
-      fetchFriendData(); // Refresh friend data after deletion
+      fetchFriendData();
     } catch (error) {
       console.error("Error deleting friend request:", error);
     }
@@ -118,8 +121,6 @@ function Friendlist() {
 
   const handleDeleteFriend = async (friendID) => {
     try {
-      console.log("token : ", authTokens?.access);
-
       await axios.post(
         `http://127.0.0.1:8000/friends/unfriend/${friendID}/`,
         {},
@@ -129,7 +130,7 @@ function Friendlist() {
           },
         }
       );
-      fetchFriendData(); // Refresh friend data after deletion
+      fetchFriendData();
     } catch (error) {
       console.error("Error deleting friend:", error);
     }
@@ -142,10 +143,31 @@ function Friendlist() {
           <div>
             <h3>Requests In</h3>
             <ul>
-              {requestsIn.map((user) => (
-                <li key={user.id}>
-                  {user.name}
-                  <button onClick={() => handleDeleteRequestSend(user.id)}>
+              {requestsIn.map((friend) => (
+                <li className="friend-item" key={friend.sender.id}>
+                  <img
+                    src={
+                      friend.sender.profile_image
+                        ? `http://127.0.0.1:8000${friend.sender.profile_image}`
+                        : publicphoto
+                    }
+                    alt={`${friend.sender.username}'s profile`}
+                    width="50"
+                    height="50"
+                  />
+                  <span className="friend-username">
+                    {friend.sender.username}
+                  </span>
+                  <button
+                    className="accept-button"
+                    onClick={() => handleAcceptRequest(friend.sender.id)}
+                  >
+                    accept
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteRequestSend(friend.sender.id)}
+                  >
                     decline
                   </button>
                 </li>
@@ -159,13 +181,25 @@ function Friendlist() {
             <h3>Requests Out</h3>
             <ul>
               {requestsOut.map((user) => (
-                <li key={user.id}>
-                  {user.name}
-                  <button onClick={() => handleAcceptRequest(user.id)}>
-                    Accept
-                  </button>
-                  <button onClick={() => handleDeleteRequestReceive(user.id)}>
-                    Delete
+                <li className="friend-item" key={user.receiver.id}>
+                  <img
+                    src={
+                      user.receiver.profile_image
+                        ? `http://127.0.0.1:8000${user.receiver.profile_image}`
+                        : publicphoto
+                    }
+                    alt={`${user.receiver.username}'s profile`}
+                    width="50"
+                    height="50"
+                  />
+                  <span className="friend-username">
+                    {user.receiver.username}
+                  </span>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteRequestReceive(user.receiver.id)}
+                  >
+                    Cancel
                   </button>
                 </li>
               ))}
@@ -194,7 +228,7 @@ function Friendlist() {
                     className="delete-button"
                     onClick={() => handleDeleteFriend(friend.id)}
                   >
-                    Delete
+                    Unfriend
                   </button>
                 </li>
               ))}
@@ -218,30 +252,9 @@ function Friendlist() {
           style={{ position: "absolute", right: 0 }}
         >
           <ul>
-            <li
-              onClick={() => {
-                setActiveTab("requestsIn");
-                setIsDropdownOpen(true);
-              }}
-            >
-              Requests In
-            </li>
-            <li
-              onClick={() => {
-                setActiveTab("requestsOut");
-                setIsDropdownOpen(true);
-              }}
-            >
-              Requests Out
-            </li>
-            <li
-              onClick={() => {
-                setActiveTab("friendsList");
-                setIsDropdownOpen(true);
-              }}
-            >
-              Friends List
-            </li>
+            <li onClick={() => setActiveTab("requestsIn")}>Requests In</li>
+            <li onClick={() => setActiveTab("requestsOut")}>Requests Out</li>
+            <li onClick={() => setActiveTab("friendsList")}>Friends List</li>
           </ul>
           {renderContent()}
         </div>
