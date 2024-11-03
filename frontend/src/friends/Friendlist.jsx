@@ -39,7 +39,7 @@ function Friendlist() {
   const fetchFriendData = async () => {
     try {
       const requestsInResponse = await axios.get(
-        "http://127.0.0.1:8000/friends/listRequests/",
+        "http://127.0.0.1:8000/friends/requests/",
         {
           headers: {
             Authorization: `Bearer ${authTokens?.access}`,
@@ -47,7 +47,7 @@ function Friendlist() {
         }
       );
       const requestsOutResponse = await axios.get(
-        "http://127.0.0.1:8000/friends/listOutGoingRequests/",
+        "http://127.0.0.1:8000/friends/out/",
         {
           headers: {
             Authorization: `Bearer ${authTokens?.access}`,
@@ -144,13 +144,27 @@ function Friendlist() {
           <div>
             <h3>Requests In</h3>
             <ul>
-              {requestsIn.map((user) => (
-                <li key={user.id}>
-                  {user.name}
-                  <button onClick={() => handleDeleteRequestSend(user.id)}>
-                    decline
-                  </button>
-                </li>
+              { console.log("requestsIn : ", requestsIn)}
+              {requestsIn.map((friend) => (
+               <li className="friend-item" key={friend.sender.id}>
+                      <img
+                        src={
+                          friend.profile_image
+                            ? `http://127.0.0.1:8000${friend.sender.profile_image}`
+                            : publicphoto
+                        }
+                        alt={`${friend.sender.username}'s profile`}
+                        width="50"
+                        height="50"
+                      />
+                      <span className="friend-username">{friend.sender.username}</span>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteFriend(friend.id)}
+                      >
+                        Delete
+                      </button>
+                    </li>
               ))}
             </ul>
           </div>
@@ -181,8 +195,8 @@ function Friendlist() {
             <ul>
               {friendsList.map(
                 (friend) => (
-                  console.log("friendLISTOOOO : ", friend),
                   (
+                    console.log("friendsList : -> ", friendsList),
                     <li className="friend-item" key={friend.id}>
                       <img
                         src={
@@ -197,7 +211,7 @@ function Friendlist() {
                       <span className="friend-username">{friend.username}</span>
                       <button
                         className="delete-button"
-                        onClick={() => handleDeleteFriend(friend.id)}
+                        onClick={() => handleDeleteFriend(friend.sender.id)}
                       >
                         Delete
                       </button>
