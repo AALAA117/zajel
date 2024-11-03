@@ -26,8 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name',
-                  'username', 'email', 'profile_image')
+        fields = ('id', 'username', 'email', 'profile_image')
 
 # Change Password Serializer
 
