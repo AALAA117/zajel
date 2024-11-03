@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./login/Login";
 import Signup from "./signup/Signup";
 import PrivateRoute from "./utils/privateroute";
-import Profile from "./Profile.jsx";
+import Profile from "./profile/Profile.jsx";
 import Homepage from "./Homepage.jsx";
 
 function App() {
