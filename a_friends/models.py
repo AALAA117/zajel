@@ -81,8 +81,8 @@ class FriendRequest(models.Model):
 
         receiver_friend_list.add_friend(self.sender)
         sender_friend_list.add_friend(self.receiver)
-
         self.save()
+        self.delete()
 
     # # the receiver declined the friend request
     def decline(self):
