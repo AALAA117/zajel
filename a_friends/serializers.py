@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import FriendList, FriendRequest
-
-
+from a_users.serializers import UserSerializer 
 class FriendListSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendList
@@ -9,7 +8,7 @@ class FriendListSerializer(serializers.ModelSerializer):
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+    sender = UserSerializer()
     class Meta:
         model = FriendRequest
-        fields = '__all__'  # Or specify the fields you want to include in your API.
-        read_only_fields = ['sender']
+        fields = ['id', 'sender']
