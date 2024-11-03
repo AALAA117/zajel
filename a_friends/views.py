@@ -9,6 +9,11 @@ from .models import FriendList, FriendRequest
 from .serializers import FriendRequestSerializer, FriendListSerializer
 from a_users.serializers import UserSerializer
 
+# DEBUG & TESTING
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+
 # ViewSet for Friend Requests
 class FriendRequestViewSet(viewsets.ModelViewSet):
     queryset = FriendRequest.objects.all()
@@ -35,7 +40,15 @@ def get_active_friend_request(sender, receiver):
     return get_object_or_404(FriendRequest, sender=sender, receiver=receiver)
 
 
-# API Views
+# TESTING VIEW
+# @csrf_exempt
+# @api_view(['POST', 'DELETE'])
+# @permission_classes([AllowAny]) 
+# def test(request, *args, **kwargs):
+#     print(request)
+#     print(args)
+#     print(kwargs)
+#     return Response({"sent": f"Friend request sent to "})
 
 @api_view(['POST'])
 def accept_request(request, *args, **kwargs):
@@ -49,7 +62,6 @@ def accept_request(request, *args, **kwargs):
 
 @api_view(['POST'])
 def decline_request(request, *args, **kwargs):
-    print("/n request", request)
     sender_id = kwargs.get('sender_id')
     receiver = request.user
     friend_request = get_active_friend_request(
@@ -58,12 +70,11 @@ def decline_request(request, *args, **kwargs):
     return Response({"declined": f"You have declined the friend request from {friend_request.sender.username}"})
 
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 def cancel_request(request, *args, **kwargs):
     receiver_id = kwargs.get('receiver_id')
     sender = request.user
-    friend_request = get_active_friend_request(
-        sender=sender, receiver=receiver_id)
+    friend_request = get_active_friend_request(sender=sender, receiver=receiver_id)
     friend_request.cancel()
     return Response({"cancelled": f"You have cancelled the friend request to {friend_request.receiver.username}"})
 
@@ -86,7 +97,6 @@ def list_all_incoming_requests(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@login_required
 @api_view(['GET'])
 def list_all_outgoing_requests(request):
     user = request.user
