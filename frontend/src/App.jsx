@@ -4,6 +4,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import PrivateRoute from "./utils/privateroute";
 import Homepage from "./Homepage";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -15,6 +16,14 @@ function App() {
         element={
           <PrivateRoute>
             <Homepage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <Profile />
           </PrivateRoute>
         }
       />
