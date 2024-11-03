@@ -60,7 +60,7 @@ function Friendlist() {
           },
         }
       );
-
+      console.log("friendsListResponse : ",friendsListResponse)
       setRequestsIn(requestsInResponse.data);
       setRequestsOut(requestsOutResponse.data);
       setFriendsList(friendsListResponse.data);
@@ -116,9 +116,11 @@ function Friendlist() {
     }
   };
 
-  const handleDeleteFriend = async (userId) => {
+  const handleDeleteFriend = async (friendID) => {
     try {
-      await axios.delete(`https://api/friends/delete/${UserId}`, {
+      console.log("token : ", authTokens?.access);
+
+      await axios.post(`http://127.0.0.1:8000/friends/unfriend/${friendID}/`,{}, {
         headers: {
           Authorization: `Bearer ${authTokens?.access}`,
         },
@@ -172,8 +174,9 @@ function Friendlist() {
             <h3>Friends List</h3>
             <ul>
               {friendsList.map((friend) => (
+                console.log("friendLISTOOOO : ",friend),
                 <li key={friend.id}>
-                  {friend.name}
+                  {friend.username}
                   <button onClick={() => handleDeleteFriend(friend.id)}>
                     Delete
                   </button>
