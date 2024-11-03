@@ -25,16 +25,8 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def freinds_list(request):
     user = request.user
-    f_list = FriendList.objects.filter(user=user)
     user_friend_list = FriendList.objects.get(user=user)
     serialize = UserSerializer(user_friend_list.get_friends(), many=True)
-
-    # print("\n\n\n")
-    # print(user_friend_list.get_friends())
-    # for friend in user_friend_list.get_friends():
-    #     print(friend.__dict__)
-    # print("\n\n\n")
-
     return Response(serialize.data, status=status.HTTP_200_OK)
 
 
@@ -77,23 +69,12 @@ def cancel_request(request, *args, **kwargs):
 
 
 @api_view(['DELETE', 'POST'])
-def unfriend(request, *args, **kwargs):
-    # print('\n' , args)
-    # print('\n' , kwargs)
-    # print("request", request)
-    # print("\n\n\nHello\n\n\n")
+def unfriend(request, *args, **kwargs):    
     user = request.user
-    print("\n\n\nuser", user)
-    
     deletee_id = kwargs.get('user_id')
     deletee = get_object_or_404(User, id=deletee_id)
-    # user_friend_list = get_object_or_404(FriendList, user=user)
     user_friend_list = FriendList.objects.get(user=user)
-    print("user_friend_list", user_friend_list)
-
-    print("\n\n\n")
     user_friend_list.unfriend(deletee)
-
     return Response({"deleted": f"You have unfriended {deletee.username} successfully"})
 
 
