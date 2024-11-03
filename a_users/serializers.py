@@ -21,10 +21,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_image = serializers.ImageField(
+        source='profile.image', read_only=True)
+
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name',
-                  'username', 'email')
+                  'username', 'email', 'profile_image')
 
 # Change Password Serializer
 

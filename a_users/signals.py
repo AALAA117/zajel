@@ -5,11 +5,13 @@ from django.contrib.auth.models import User
 from .models import Profile
 from a_friends.models import FriendList
 
+
 @receiver(post_save, sender=User)
 def user_postsave(sender, instance, created, **kwargs):
     user = instance
     # add profile,FriendList if user is created
     if created:
+        print("create user")
         Profile.objects.create(user=user)
         FriendList.objects.create(user=user)
     else:
