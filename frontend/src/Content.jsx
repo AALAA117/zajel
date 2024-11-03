@@ -8,7 +8,6 @@ import SearchBar from "./SearchBar";
 
 function ContentTable({ onSelectChat }) {
   const [groups, setGroups] = useState([]);
-  // eslint-disable-next-line no-unused-vars
   const [searchResults, setSearchResults] = useState([]);
   const api = useAxios();
 
@@ -48,7 +47,7 @@ function ContentTable({ onSelectChat }) {
         <SearchBar setSearchResults={setSearchResults} />
         <CreateGroupButton />
       </div>
-      {groups.map((group) => (
+      {(searchResults.length > 0 ? searchResults : groups).map((group) => (
         <div
           key={group.id}
           className="group"

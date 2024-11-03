@@ -49,6 +49,7 @@ def accept_request(request, *args, **kwargs):
 
 @api_view(['POST'])
 def decline_request(request, *args, **kwargs):
+    print("/n request", request)
     sender_id = kwargs.get('sender_id')
     receiver = request.user
     friend_request = get_active_friend_request(
