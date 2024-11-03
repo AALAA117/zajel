@@ -9,7 +9,11 @@ function Headerchat({ contact }) {
     );
   return (
     <div className="chat-header">
-      <img className="contact-image" src={publicphoto} alt={contact.name} />
+      <img
+        className="contact-image"
+        src={contact.photo || publicphoto}
+        alt={contact.name}
+      />
       <h2>{contact.name}</h2>
     </div>
   );

@@ -18,6 +18,10 @@ export const WebSocketProvider = ({ children, roomName }) => {
       const authTokens = JSON.parse(authTokensSring);
       const token = authTokens.access;
 
+      if (ws.current) {
+        ws.current.close();
+      }
+
       ws.current = new WebSocket(
         `ws://localhost:8000/ws/chat/${roomName}/?token=${token}`
       );

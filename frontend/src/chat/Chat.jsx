@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Headerchat from "../Header_chat.jsx";
 import Messagebar from "../message/Messagebar";
 import MessageScreen from "../message/Message_screen";
 import { jwtDecode } from "jwt-decode";
-import { handleSendMessage, handleReceiveMessage } from "../core/messagehandler"; // Import handlers
+import {
+  handleSendMessage,
+  handleReceiveMessage,
+} from "../core/messagehandler"; // Import handlers
 import { useWebSocket } from "../core/websocket";
 import useAxios from "../utils/useAxios";
 
@@ -12,7 +16,6 @@ function Chat({ contact }) {
   // const sendMessageRef = useRef(null);
   const api = useAxios();
   const authTokens = localStorage.getItem("authTokens");
-  console.log("token", authTokens);
   const UserId = jwtDecode(authTokens).user_id;
   const { ws, isWsOpen } = useWebSocket();
   useEffect(() => {
@@ -48,8 +51,8 @@ function Chat({ contact }) {
         }
       };
 
-      ws.onclose = () => {
-        console.log("WebSocket closed");
+      ws.onclose = (event) => {
+        console.log("WebSocket closed", event.code);
       };
 
       ws.onerror = (error) => {
@@ -63,7 +66,6 @@ function Chat({ contact }) {
     //     ws.close();
     //   }
     // };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contact, ws]);
   return (
     <div className="chatbox">

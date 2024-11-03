@@ -14,9 +14,7 @@ function Friendlist() {
   const [friendsList, setFriendsList] = useState([]);
   const dropdownRef = useRef(null);
   const { authTokens } = useContext(AuthContext);
-  console.log("token", authTokens);
   const UserId = authTokens.user.pk;
-  console.log(UserId);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -62,7 +60,6 @@ function Friendlist() {
           },
         }
       );
-      console.log("friendsListResponse : ", friendsListResponse);
       setRequestsIn(requestsInResponse.data);
       setRequestsOut(requestsOutResponse.data);
       setFriendsList(friendsListResponse.data);
@@ -73,6 +70,7 @@ function Friendlist() {
 
   useEffect(() => {
     fetchFriendData(); // Fetch data when the component mounts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAcceptRequest = async (userId) => {
@@ -179,32 +177,27 @@ function Friendlist() {
           <div>
             <h3>Friends List</h3>
             <ul>
-              {friendsList.map(
-                (friend) => (
-                  console.log("friendLISTOOOO : ", friend),
-                  (
-                    <li className="friend-item" key={friend.id}>
-                      <img
-                        src={
-                          friend.profile_image
-                            ? `http://127.0.0.1:8000${friend.profile_image}`
-                            : publicphoto
-                        }
-                        alt={`${friend.username}'s profile`}
-                        width="50"
-                        height="50"
-                      />
-                      <span className="friend-username">{friend.username}</span>
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDeleteFriend(friend.id)}
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  )
-                )
-              )}
+              {friendsList.map((friend) => (
+                <li className="friend-item" key={friend.id}>
+                  <img
+                    src={
+                      friend.profile_image
+                        ? `http://127.0.0.1:8000${friend.profile_image}`
+                        : publicphoto
+                    }
+                    alt={`${friend.username}'s profile`}
+                    width="50"
+                    height="50"
+                  />
+                  <span className="friend-username">{friend.username}</span>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteFriend(friend.id)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
         );

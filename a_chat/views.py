@@ -12,6 +12,29 @@ class ZajelGroupViewSet(viewsets.ModelViewSet):
     queryset = ZajelGroup.objects.filter()
     serializer_class = ZajelGroupSerializer
 
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+
+        # set default description in none provided
+        if not data.get("description"):
+            data["description"] = ""
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        group = serializer.save()
+
+        # add members after saving
+        members_data = data.getlist("members")
+
+        # add the user who make request
+        members_data.append(request.user.id)
+
+        if members_data:
+            group.members.set(set(members_data))
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def list(self, request, *args, **kwargs):
 
         user = request.user

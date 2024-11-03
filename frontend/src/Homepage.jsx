@@ -13,6 +13,7 @@ function Homepage() {
   const handleChatSelect = (chat) => {
     setSelectedChat(chat);
   };
+
   return (
     <>
       <Header onLogout={handleLogout} />
