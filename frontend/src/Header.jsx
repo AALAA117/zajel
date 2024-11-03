@@ -3,7 +3,7 @@ import axios from "axios";
 import LOGOUT from "./assets/logout.webp";
 import Default from "./assets/default.jpeg";
 import AuthContext from "./context/AuthContext";
-import Friendlist from "./Friendlist";
+import Friendlist from "./friends/Friendlist";
 import "./Header.css";
 
 function Header() {

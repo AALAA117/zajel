@@ -30,58 +30,6 @@ function SearchBar({ setSearchResults }) {
     }
   };
 
-  // const handleSendFriendRequest = async (userId) => {
-  //   try {
-  //     await axios.post(`http://127.0.0.1:8000/friends/api/friends_requests/`, { userId }, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-  //       },
-  //     });
-  //     alert('Friend request sent!');
-  //   } catch (err) {
-  //     console.error('Error sending friend request:', err);
-  //   }
-  // };
-
-  //   return (
-  //     <div className="search-bar">
-  //       <input
-  //         type="text"
-  //         value={query}
-  //         onChange={handleSearch}
-  //         placeholder="Search"
-  //       />
-  //       <ul className="search-results">
-  //         {query.length > 2 && (
-  //           <SearchResults
-  //             searchResults={setSearchResults}
-  //             handleSendFriendRequest={handleSendFriendRequest}
-  //           />
-  //         )}
-  //       </ul>
-  //     </div>
-  //   );
-  // }
-
-  // const SearchResults = ({ searchResults }) => {
-  //   return (
-  //     <div>
-  //       {searchResults.map((user) => (
-  //         <li key={user.id}>
-  //           {user.name}
-  //           {user.isFriend ? (
-  //             <span> (Friend)</span>
-  //           ) : (
-  //             <button onClick={() => handleSendFriendRequest(user.id)}>
-  //               Send Friend Request
-  //             </button>
-  //           )}
-  //         </li>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-
   return (
     <div className="search-bar">
       <input

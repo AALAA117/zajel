@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useEffect, useState } from "react";
-import Public_chat from "./Publicchat";
-import useAxios from "./utils/useAxios";
-import Footer from "./Footer";
-import CreateGroupButton from "./Create";
-import SearchBar from "./SearchBar";
+import Public_chat from "../chat/Publicchat";
+import useAxios from "../utils/useAxios";
+import Footer from "../Footer";
+import CreateGroupButton from "../Create";
+import SearchBar from "../SearchBar";
 
 function ContentTable({ onSelectChat }) {
   const [groups, setGroups] = useState([]);

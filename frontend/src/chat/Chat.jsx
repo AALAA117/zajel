@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Headerchat from "./Header_chat";
-import Messagebar from "./Messagebar";
-import MessageScreen from "./Message_screen";
+import Headerchat from "../Header_chat.jsx";
+import Messagebar from "../message/Messagebar";
+import MessageScreen from "../message/Message_screen";
 import { jwtDecode } from "jwt-decode";
-import { handleSendMessage, handleReceiveMessage } from "./core/messagehandler"; // Import handlers
-import { useWebSocket } from "./core/websocket";
-import useAxios from "./utils/useAxios";
+import { handleSendMessage, handleReceiveMessage } from "../core/messagehandler"; // Import handlers
+import { useWebSocket } from "../core/websocket";
+import useAxios from "../utils/useAxios";
 
 function Chat({ contact }) {
   const [messages, setMessages] = useState([]);

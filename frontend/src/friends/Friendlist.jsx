@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
-import FRIEND from "./assets/friend.jpg";
-import AuthContext from "./context/AuthContext";
+import FRIEND from "../assets/friend.jpg";
+import AuthContext from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 
 function Friendlist() {

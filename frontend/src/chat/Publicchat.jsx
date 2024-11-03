@@ -1,4 +1,4 @@
-import publicphoto from "./assets/default.jpeg";
+import publicphoto from "../assets/default.jpeg";
 
 function Public_chat({ name }) {
   return (
