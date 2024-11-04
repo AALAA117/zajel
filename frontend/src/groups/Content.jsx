@@ -11,41 +11,44 @@ function ContentTable({ onSelectChat }) {
   const [searchResults, setSearchResults] = useState([]);
   const api = useAxios();
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        console.log(localStorage.getItem("authTokens"));
-        const response = await api.get("/chat/api/groups/");
-        console.log("response:", response);
-        const data = response.data;
-        console.log("fetched groups:", data);
-        setGroups(data);
-      } catch (error) {
-        if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-          console.error("Response headers:", error.response.headers);
-        } else {
-          console.error("Error", error.message);
-        }
+  const fetchGroups = async () => {
+    try {
+      const response = await api.get("/chat/api/groups/");
+      console.log("response:", response);
+      const data = response.data;
+      console.log("fetched groups:", data);
+      setGroups(data);
+    } catch (error) {
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      } else {
+        console.error("Error", error.message);
       }
-    };
+    }
+  };
+  useEffect(() => {
     fetchGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Add an empty array here to prevent re-runs
+
+  const handleGroupCreated = () => {
+    fetchGroups();
+  };
 
   const handleChatClick = (group) => {
     onSelectChat({
       id: group.id,
       name: group.group_name,
-      photo: group.group_image,
+      photo: group.image,
     });
   };
   return (
     <div className="contenttable">
       <div className="searchcreate">
         <SearchBar setSearchResults={setSearchResults} />
-        <CreateGroupButton />
+        <CreateGroupButton onGroupCreated={handleGroupCreated} />
       </div>
       {(searchResults.length > 0 ? searchResults : groups).map((group) => (
         <div
@@ -53,10 +56,9 @@ function ContentTable({ onSelectChat }) {
           className="group"
           onClick={() => handleChatClick(group)}
         >
-          <Public_chat name={group.group_name} />
+          <Public_chat name={group.group_name} photo={group.image} />
         </div>
       ))}
-      {/* <Content_Chat /> */}
       <Footer />
     </div>
   );
