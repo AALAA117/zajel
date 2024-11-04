@@ -4,6 +4,7 @@ import FRIEND from "../assets/friend.jpg";
 import publicphoto from "../assets/default.jpeg";
 import AuthContext from "../context/AuthContext";
 import "./Friendlist.css";
+import {v4 as uuidv4} from 'uuid';
 
 function Friendlist() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -72,10 +73,46 @@ function Friendlist() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleAcceptRequest = async (userId) => {
+   // Helper function to add new group to friends list
+  const addNewGroupToFriendsList = (newGroup) => {
+    setFriendsList((prevList) => [...prevList, newGroup]);
+  };
+
+  const createPrivateGroup = async (friendId) => {
+    try {
+      const formData = new FormData();
+      const newGroupName = uuidv4();
+      formData.append("group_name", newGroupName);
+      formData.append("is_private", true);
+      formData.append("members", friendId);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/chat/api/groups/",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${authTokens?.access}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // if (response.status === 201) {
+      //   console.log("New group created successfully");
+      //   // Add the newly created group to the friends list
+      //   const newGroup = { id: response.data.id, group_name: newGroupName, members: [friendId] };
+      //   console.log(newGroup);
+      //   addNewGroupToFriendsList(newGroup);
+      // }
+    } catch (err) {
+      console.error("Error creating new group:", err);
+    }
+  };
+
+  const handleAcceptRequest = async (friendID) => {
     try {
       await axios.post(
-        `http://127.0.0.1:8000/friends/accept/${userId}/`,
+        `http://127.0.0.1:8000/friends/accept/${friendID}/`,
         {},
         {
           headers: {
@@ -84,6 +121,20 @@ function Friendlist() {
         }
       );
       fetchFriendData();
+      // console.log("Chat between the users will be created here");
+      // console.log("Friend ID:", friendID);
+      // console.log("My ID:", authTokens?.user.pk);
+      const newGroup = await createPrivateGroup(friendID);
+
+      // If the group was created successfully, update the friends list
+      if (newGroup) {
+        setFriendsList((prevList) => [...prevList, newGroup]);
+      }
+
+      // Optionally update requestsIn to remove the accepted request
+      // setRequestsIn((prev) => prev.filter((request) => request.sender.id !== friendID));
+
+      // Then create a private group with the friend      
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
