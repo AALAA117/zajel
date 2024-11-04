@@ -106,7 +106,7 @@ function CreateGroupButton({ onGroupCreated }) {
 
       {showDropdown && (
         <div className="dropdown-menu">
-          <h2>Create Zajel Group</h2>
+          <h2>New Zajel Group 🕊️</h2>
           <input
             type="text"
             placeholder="Group Name"
@@ -125,7 +125,7 @@ function CreateGroupButton({ onGroupCreated }) {
             onChange={(e) => setImage(e.target.files[0])}
           />
 
-          <h3>Select Amigo</h3>
+          <h3>Select Friends</h3>
           <ul>
             {loadingFriends ? (
               <li>Loading friends...</li>
