@@ -6,6 +6,6 @@ __pycache__/*
 __pycache__/
 *.pyc
 *.pyo
-node_modules/*.pyc
-*.pyc
+node_modules/
 db.sqlite3
+

@@ -11,52 +11,49 @@ function ContentTable({ onSelectChat }) {
   const [searchResults, setSearchResults] = useState([]);
   const api = useAxios();
 
-  const fetchGroups = async () => {
-    try {
-      const response = await api.get("/chat/api/groups/");
-      console.log("response:", response);
-      const data = response.data;
-      console.log("fetched groups:", data);
-      setGroups(data);
-    } catch (error) {
-      if (error.response) {
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
-      } else {
-        console.error("Error", error.message);
-      }
-    }
-  };
   useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        console.log(localStorage.getItem("authTokens"));
+        const response = await api.get("/chat/api/groups/");
+        console.log("response:", response);
+        const data = response.data;
+        console.log("fetched groups:", data);
+        setGroups(data);
+      } catch (error) {
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+          console.error("Response headers:", error.response.headers);
+        } else {
+          console.error("Error", error.message);
+        }
+      }
+    };
     fetchGroups();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Add an empty array here to prevent re-runs
-
-  const handleGroupCreated = () => {
-    fetchGroups();
-  };
 
   const handleChatClick = (group) => {
     onSelectChat({
       id: group.id,
       name: group.group_name,
-      photo: group.image,
+      photo: group.group_image,
     });
   };
   return (
     <div className="contenttable">
       <div className="searchcreate">
         <SearchBar setSearchResults={setSearchResults} />
-        <CreateGroupButton onGroupCreated={handleGroupCreated} />
+        <CreateGroupButton />
       </div>
       {(searchResults.length > 0 ? searchResults : groups).map((group) => (
         <div
-          key={`${group.id}-${group.group_name}`}
+          key={group.id}
           className="group"
           onClick={() => handleChatClick(group)}
         >
-          <Public_chat name={group.group_name} photo={group.image} />
+          <Public_chat name={group.group_name} />
         </div>
       ))}
       {/* <Content_Chat /> */}
