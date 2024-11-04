@@ -20,7 +20,7 @@ function Homepage() {
       <div className="app-container">
         <ContentTable onSelectChat={handleChatSelect} />
         {selectedChat && (
-          <WebSocketProvider roomName={selectedChat.name}>
+          <WebSocketProvider roomName={selectedChat.actual_name}>
             <Chat contact={selectedChat} />
           </WebSocketProvider>
         )}
