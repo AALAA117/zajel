@@ -3,6 +3,7 @@ import axios from "axios";
 import Default from "../assets/default.jpeg";
 import AuthContext from "../context/AuthContext";
 import "./Profile.css";
+import Header from "../Header";
 function Profile() {
   const [userData, setUserData] = useState(null);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
@@ -126,6 +127,7 @@ function Profile() {
   };
   return (
     <div className="profile-page">
+      <Header />
       <div className="profile-content-box">
         <h2>Zajel Profile</h2>
         <img
