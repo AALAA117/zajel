@@ -6,6 +6,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
+  width: 100%;
 }
 
 .upperpart .title {
@@ -205,4 +207,16 @@
 
 .frienddropdown li:hover {
   background-color: #f0f0f0;
+}
+
+.home-button {
+  background-color: aliceblue;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.home-button:hover {
+  background-color: #e0f0ff;
 }
