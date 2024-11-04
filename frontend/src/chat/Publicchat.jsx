@@ -1,12 +1,12 @@
 import publicphoto from "../assets/default.jpeg";
 
 function Public_chat({ name, photo }) {
-  const displayphoto = photo ? photo : publicphoto;
+  console.log("default photo", publicphoto);
   return (
     <div className="publicchat">
       <img
         className="publicchat-image"
-        src={displayphoto}
+        src={photo || publicphoto}
         alt={name}
         width="35"
         height="35"
