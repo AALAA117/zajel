@@ -15,7 +15,7 @@ class ZajelGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = ZajelGroup
         # Or specify the fields you want to include in your API.
-        fields = ['id', 'group_name', 'members', 'image', 'description']
+        fields = ['id', 'group_name', 'members', 'image', 'description', 'is_private']
 
         def create(self, validated_data):
             # remove members from validate data

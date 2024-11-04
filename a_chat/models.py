@@ -21,7 +21,7 @@ class ZajelGroup(models.Model):
     image = models.ImageField(upload_to="group_image/", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     description = models.TextField(null=True, blank=True)
-
+    is_private = models.BooleanField(default=False)
     def __str__(self) -> str:
         return self.group_name
 
