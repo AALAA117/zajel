@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import Default from "./assets/default.jpeg";
-import AuthContext from "./context/AuthContext";
+import Default from "../assets/default.jpeg";
+import AuthContext from "../context/AuthContext";
 import "./Profile.css";
 function Profile() {
   const [userData, setUserData] = useState(null);
