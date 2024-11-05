@@ -63,11 +63,15 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Add your frontend URL here
 ]
 
-# CORS_ALLOW_CREDENTIALS = True  # If you need to send cookies or HTTP authentication
+CORS_ALLOW_CREDENTIALS = True  # If you need to send cookies or HTTP authentication
 
 
 MIDDLEWARE = [
