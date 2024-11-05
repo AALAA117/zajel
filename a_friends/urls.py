@@ -17,6 +17,7 @@ urlpatterns = [
     path('accept/<int:user_id>/', views.accept_request, name='accept'),
     path('decline/<int:sender_id>/', views.decline_request, name='decline'),
     path('cancel/<int:receiver_id>/', views.cancel_request, name='cancel'),
+    path('send/<int:receiver_id>/', views.send_request, name='send'),
     path('unfriend/<int:user_id>/', views.unfriend, name='unfriend'),
     path('list/', views.freinds_list, name='friends_list'),
 ]
