@@ -69,6 +69,15 @@ def decline_request(request, *args, **kwargs):
     friend_request.decline()
     return Response({"declined": f"You have declined the friend request from {friend_request.sender.username}"})
 
+@api_view(['POST'])
+def send_request(request, *args, **kwargs):
+    print("request", request)
+    receiver_id = kwargs.get('receiver_id')
+    sender = request.user
+    receiver = get_object_or_404(User, id=receiver_id)
+    friend_request = FriendRequest(sender=sender, receiver=receiver)
+    friend_request.save()
+    return Response({"sent": f"Friend request sent to {receiver.username}"})
 
 @api_view(['DELETE'])
 def cancel_request(request, *args, **kwargs):
