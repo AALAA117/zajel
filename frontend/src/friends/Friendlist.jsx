@@ -11,6 +11,7 @@ function Friendlist() {
   const [activeTab, setActiveTab] = useState("requestsIn");
   const [requestsIn, setRequestsIn] = useState([]);
   const [requestsOut, setRequestsOut] = useState([]);
+  const [users, setUsers] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const dropdownRef = useRef(null);
   const { authTokens } = useContext(AuthContext);
@@ -60,9 +61,24 @@ function Friendlist() {
         }
       );
 
+      const users = await axios.get(
+        "http://127.0.0.1:8000/user/api/user/",
+        {
+          headers: {
+            Authorization: `Bearer ${authTokens?.access}`,
+          },
+        }
+      );
+
       setRequestsIn(requestsInResponse.data || []);
       setRequestsOut(requestsOutResponse.data || []);
       setFriendsList(friendsListResponse.data || []);
+      setUsers(users.data || []);
+      console.log("users data:  ",users.data);
+      users.data.forEach(user => {
+        console.log(user.profile_image)
+      });
+  
     } catch (error) {
       console.error("Error fetching friend data:", error);
     }
@@ -187,6 +203,23 @@ function Friendlist() {
     }
   };
 
+  const handleSendRequest = async (userID) => {
+    try {
+      await axios.post(
+        `http://127.0.0.1:8000/friends/send/${userID}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${authTokens?.access}`,
+          },
+        }
+      );
+      fetchFriendData();
+    } catch (error) {
+      console.error("Error deleting friend:", error);
+    }
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "requestsIn":
@@ -286,6 +319,35 @@ function Friendlist() {
             </ul>
           </div>
         );
+      case "usersList":
+        return (
+          <div>
+            <h3>Users</h3>
+            <ul>
+              {users.map((user) => (
+                <li className="friend-item" key={user.id}>
+                  <img
+                    src={
+                      user.profile_image
+                        ? `${user.profile_image}`
+                        : publicphoto
+                    }
+                    alt={`${user.username}'s profile`}
+                    width="50"
+                    height="50"
+                  />
+                  <span className="friend-username">{user.username}</span>
+                  <button
+                    className="accept-button"
+                    onClick={() => handleSendRequest(user.id)}
+                  >
+                    Add Friend
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
       default:
         return null;
     }
@@ -306,6 +368,8 @@ function Friendlist() {
             <li onClick={() => setActiveTab("requestsIn")}>Requests In</li>
             <li onClick={() => setActiveTab("requestsOut")}>Requests Out</li>
             <li onClick={() => setActiveTab("friendsList")}>Friends List</li>
+            <li onClick={() => setActiveTab("usersList")}>Make connections</li>
+
           </ul>
           {renderContent()}
         </div>
