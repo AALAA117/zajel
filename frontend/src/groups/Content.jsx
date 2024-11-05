@@ -97,7 +97,7 @@ function ContentTable({ onSelectChat }) {
           className="group"
           onClick={() => handleChatClick(group)}
         >
-          <Public_chat name={group.group_name} image={group.image} />
+          <Public_chat name={group.group_name} photo={group.image} />
         </div>
       ))}
       <Footer />
