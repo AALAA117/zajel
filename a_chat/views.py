@@ -14,7 +14,34 @@ class ZajelGroupViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
+        if data.get("is_private"):
+            members = data.getlist("members")
+            # members[0] = int(member[0])
+            print("\n\n ================== MEMBEES ==================\n\n")
+            print("members : ", members)
+            members.append(request.user.id)
+            print("members : ", members)
+            # members = [int(member) for member in members]
+            print("members TYPE : ")
+            for member in members:
+                print(type(member))
+            try:
+                members = [int(member) for member in members]
+            except ValueError as e:
+                # Handle the case where conversion fails
+                print(f"Error converting members to integers: {e}")
+                return Response({"error": "Invalid member ID"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            print("members TYPE : ")
+            for member in members:
+                print(type(member))
 
+            print("\n=================================\n")            
+            # print("\n",members, "\n \n")
+            if ZajelGroup.objects.filter(members__in=members, is_private=True).exists():
+                return Response(
+                    {"error": "Group already exists"}, status=status.HTTP_400_BAD_REQUEST
+                )
         # set default description in none provided
         if not data.get("description"):
             data["description"] = ""
